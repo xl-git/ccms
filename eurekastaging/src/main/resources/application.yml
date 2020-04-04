@@ -1,0 +1,57 @@
+server:
+  port: 8005 # 指定Eureka实例的端口
+  servlet:
+    context-path: /staging # 设置项目访问路径,访问路径为：http://localhost:8000/smbmsprovider,如果不配置则访问路径为http://localhost:8000
+    jsp:
+      init-parameters:
+        development: true # 修改JSP之后立即加载 server.jsp-servlet.init-parameters.development=true
+eureka:
+  instance:
+    prefer-ip-address: true # 是否显示主机IP
+  client:
+    service-url:
+      defaultzone:
+        http://localhost:8761/eureka/ # 指定Eureka服务端地址
+spring:
+  application:
+    name: eurekastaging #指定应用名称
+  # mysql数据库连接
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/ccms_db?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&serverTimezone=GMT
+    username: root
+    password: root
+
+  # 配置Redis服务器
+  redis:
+    database: 0
+    host: 127.0.0.1
+    port: 6379
+    user: root
+    password: 123
+
+  # 访问ActiveMQ服务器：ActiveMQ消息队列配置.(如果用内置的ActiveMQ，就不需要配置如下代码)
+  activemq:
+    broker-url: tcp://10.1.10.165:61616
+
+  # jsp配置
+  mvc:
+    view:
+      prefix: /WEB-INF/jsp/
+      suffix: .jsp
+    static-path-pattern: /**
+  thymeleaf:
+    cache: false
+    enabled: false
+  devtools:
+    restart:
+      enabled: true
+
+# 配置mapper映射文件位置
+mybatis:
+  mapper-locations: classpath:mapper/**/*.xml # mapper映射文件
+# log4j2配置：自定义log4j2配置
+logging:
+  config:
+    classpath: log4j2.xml
+debug: true

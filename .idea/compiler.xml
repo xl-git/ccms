@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="eurekacardmanage" />
+        <module name="eurekamanager" />
+        <module name="ccms" />
+        <module name="eurekarepaymentmanage" />
+        <module name="eurekauser" />
+        <module name="eurekacustomermanage" />
+        <module name="eurekastaging" />
+        <module name="eurekaserver" />
+        <module name="eurekaaccountmanage" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="customermanage" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="customermanage" options="-parameters" />
+      <module name="eurekaaccountmanage" options="-parameters" />
+      <module name="eurekacardmanage" options="-parameters" />
+      <module name="eurekacustomermanage" options="-parameters" />
+      <module name="eurekamanager" options="-parameters" />
+      <module name="eurekarepaymentmanage" options="-parameters" />
+      <module name="eurekaserver" options="-parameters" />
+      <module name="eurekastaging" options="-parameters" />
+      <module name="eurekauser" options="-parameters" />
+    </option>
+  </component>
+</project>

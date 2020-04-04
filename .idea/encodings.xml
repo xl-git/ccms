@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/customermanage" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/eurekaaccountmanage" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/eurekacardmanage" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/eurekacustomermanage" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/eurekamanager" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/eurekarepaymentmanage" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/eurekaserver" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/eurekastaging" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/eurekauser" charset="UTF-8" />
+  </component>
+</project>
