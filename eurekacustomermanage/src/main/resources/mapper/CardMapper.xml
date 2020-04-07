@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.szit.eurekacustomermanage.mapper.CardMapper">
+    <!-- 映射 -->
+    <resultMap type="com.szit.eurekastudent.pojo.Card" id="cardList">
+        <result property="cid" column="cid" />
+        <result property="cNum" column="cnum" />
+        <result property="cType" column="ctype" />
+        <result property="intoclassdate" column="intoclassdate" />
+        <result property="uid" column="uid" />
+        <result property="ccid" column="ccid" />
+        <result property="unid" column="unid" />
+        <result property="lid" column="lid" />
+        <result property="email" column="email" />
+        <result property="payAccount" column="payaccount" />
+        <result property="collection" column="collection" />
+        <result property="knowBook" column="knowbook" />
+        <result property="lineCredit" column="linecredit" />
+        <result property="availableCredit" column="availablecredit" />
+        <result property="currency" column="currency" />
+        <result property="cardCash" column="cardcash" />
+        <result property="openStatus" column="openstatus" />
+        <result property="tradPassword" column="tradpassword" />
+        <result property="csid" column="csid" />
+        <association property="user" javaType="com.szit.eurekacustomermanage.pojo.User">
+            <id property="uid" column="uid" />
+            <result property="telphone" column="telphone" />
+            <result property="userName" column="username" />
+            <result property="uPassword" column="upassword" />
+        </association>
+        <association property="creditCardInfo" javaType="com.szit.eurekacustomermanage.pojo.CreditCardInfo">
+            <id property="ccid" column="ccid" />
+            <result property="cardHolderName" column="cardholdername" />
+            <result property="certificateType" column="certificatetype" />
+            <result property="certificateNum" column="certificatenum" />
+            <result property="phone" column="phone" />
+            <result property="nation" column="nation" />
+            <result property="maritalStatus" column="maritalstatus" />
+            <result property="certificateDate" column="certificatedate" />
+            <result property="educationLevel" column="educationlevel" />
+            <result property="nowAddress" column="nowaddress" />
+            <result property="homeCondition" column="homecondition" />
+            <result property="postalCode" column="postalcode" />
+        </association>
+        <association property="unit" javaType="com.szit.eurekacustomermanage.pojo.Unit">
+            <id property="unid" column="unid" />
+            <result property="uName" column="uname" />
+            <result property="uNature" column="unature" />
+            <result property="uPhone" column="uphone" />
+            <result property="uDvelop" column="udvelop" />
+            <result property="uAddress" column="uaddress" />
+            <result property="uDuty" column="uduty" />
+            <result property="uThing" column="uthing" />
+            <result property="uIncome" column="uincome" />
+            <result property="uPostal" column="upostal" />
+        </association>
+        <association property="linkMan" javaType="com.szit.eurekacustomermanage.pojo.LinkMan">
+            <id property="lid" column="lid" />
+            <result property="lName" column="lname" />
+            <result property="lPhone" column="lphone" />
+            <result property="lRelation" column="lrelation" />
+        </association>
+        <association property="cardStatus" javaType="com.szit.eurekacustomermanage.pojo.CardStatus">
+            <id property="csid" column="csid" />
+            <result property="cardStatusType" column="cardStatustype" />
+        </association>
+    </resultMap>
+
+    <!-- 分页查询学生列表 -->
+    <select id="getStudentsByPage" resultMap="studentList">
+        select s.*
+        from (select rownum no,sid,sname,intoclassdate,address,phone from student) s
+        <where>
+            <if test="cid!=null and cid!=''">
+                AND s.cid = #{cid}
+            </if>
+            <if test="sname!=null and sname!=''">
+                AND s.sname LIKE CONCAT('%',#{sname},'%')
+            </if>
+            <if test="minDate!=null and minDate!=''">
+                AND s.intoclassdate &gt;= to_date(#{minDate},'yyyy-mm-dd')
+            </if>
+            <if test="maxDate!=null and maxDate!=''">
+                AND s.intoclassdate &lt;= to_date(#{maxDate},'yyyy-mm-dd')
+            </if>
+            <if test="pageIndex!=null and pageIndex!=0 and pageSize!=null and pageSize!=0">
+                AND s.no BETWEEN((#{pageIndex}-1)*#{pageSize}+1,#{pageSize})
+            </if>
+        </where>
+    </select>
+
+    <!--查询学生的总数-->
+    <select id="getCountsByPage" resultMap="studentList">
+        select count(*)
+        from student
+        <where>
+            <if test="cid!=null and cid!=''">
+                AND cid = #{cid}
+            </if>
+            <if test="sname!=null and sname!=''">
+                AND sname LIKE CONCAT('%',#{sname},'%')
+            </if>
+            <if test="minDate!=null and minDate!=''">
+                AND intoclassdate &gt;= to_date(#{minDate},'yyyy-mm-dd')
+            </if>
+            <if test="maxDate!=null and maxDate!=''">
+                AND intoclassdate &lt;= to_date(#{maxDate},'yyyy-mm-dd')
+            </if>
+        </where>
+    </select>
+
+    <!-- 通过学生姓名查找学生 -->
+    <select id="getStudentBySname" resultMap="studentList" parameterType="String">
+		select *
+		from student
+		where sname = #{sname}
+	</select>
+
+    <!-- 通过学号查找学生 -->
+    <select id="getStudentBySid" resultMap="studentList" parameterType="int">
+		select *
+		from student
+		where sid = #{sid}
+	</select>
+
+    <!-- 删除学生信息 -->
+    <delete id="deleteStudent" parameterType="int">
+		delete from student where sid=#{sid}
+	</delete>
+
+    <!-- 修改学生信息 -->
+    <update id="updateStudent" parameterType="com.szit.eurekastudent.pojo.Student">
+		update student set sname=#{sname},intoclassdate=#{intoclassdate},
+		cid=#{cid},address=#{address},phone=#{phone}
+		where sid=#{sid}
+	</update>
+
+    <!-- 添加学生信息 -->
+    <insert id="registered" parameterType="com.szit.eurekastudent.pojo.Student">
+		insert into student(sid,sname,spassword,cid)
+		values(seq_student.NEXTVAL,#{sname},#{spassword},#{cid})
+	</insert>
+</mapper>

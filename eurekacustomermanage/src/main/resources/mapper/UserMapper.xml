@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.szit.eurekacustomermanage.mapper.UserMapper">
+    <!-- 映射 -->
+
+    <!--通过用户名或者手机号查询用户信息-->
+    <select id="getUserByUserNameOrTelphone" resultType="com.szit.eurekacustomermanage.pojo.User">
+        select * from users
+        <where>
+            <if test="userName!=null and userName!=''">
+                AND username=#{userName}
+            </if>
+            <if test="telphone!=null and telphone!=''">
+                OR telphone=#{telphone}
+            </if>
+        </where>
+    </select>
+
+</mapper>
