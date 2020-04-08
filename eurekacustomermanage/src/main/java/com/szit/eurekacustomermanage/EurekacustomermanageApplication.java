@@ -9,7 +9,7 @@ import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
 @EnableEurekaClient
-@MapperScan("com.szit.eurekacustomermanager.mapper")
+@MapperScan("com.szit.eurekacustomermanage.mapper")
 public class EurekacustomermanageApplication {
 
     public static void main(String[] args) {

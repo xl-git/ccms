@@ -22,13 +22,15 @@ public class CustomerController {
     private RestTemplate restTemplate;
 
     /**
-     * 跳转到首页
+     * 跳转到用户客户管理首页
      * @return
      */
-    @RequestMapping("/index.html")
-    protected String index(){
-        return "index";
+    @RequestMapping("/customermanage.html")
+    protected String customermanage(){
+        return "customermanage";
     }
+
+
 
     public UserService getUserService() {
         return userService;
