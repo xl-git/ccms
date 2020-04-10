@@ -15,7 +15,7 @@
             币种：
         </td>
         <td>
-            <input name="currency" type="text" value=""  />
+            <input name="currency" type="text" value="${card.currency}"  />
         </td>
     </tr>
     <tr>
@@ -23,7 +23,7 @@
             信用额度：
         </td>
         <td>
-            <input name="lineCredit" type="text" value=""  />
+            <input name="lineCredit" type="text" value="${card.lineCredit}"  />
         </td>
     </tr>
     <tr>
@@ -31,7 +31,7 @@
             <a href="">可用额度：</a>
         </td>
         <td>
-            <input name="availableCredit" type="text" value=""  />
+            <input name="availableCredit" type="text" value="${card.availableCredit}"  />
         </td>
     </tr>
     <tr>
@@ -39,7 +39,7 @@
             预借现金可用额度：
         </td>
         <td>
-            <input name="cardCash" type="text" value=""  />
+            <input name="cardCash" type="text" value="${card.cardCash}"  />
         </td>
     </tr>
     <tr>

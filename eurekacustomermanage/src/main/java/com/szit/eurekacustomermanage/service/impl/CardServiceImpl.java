@@ -21,10 +21,10 @@ public class CardServiceImpl implements CardService {
     /**
      * 通过用户编号获取信用卡信息
      * @param uid 用户编号
-     * @return 返回用户实体对象泛型集合
+     * @return 返回信用卡实体对象
      */
-    public List<Card> getCardsByUid(Integer uid) {
-        return cardMapper.getCardsByUid(uid);
+    public Card getCardByUid(Integer uid) {
+        return cardMapper.getCardByUid(uid);
     }
 
     public CardMapper getCardMapper() {

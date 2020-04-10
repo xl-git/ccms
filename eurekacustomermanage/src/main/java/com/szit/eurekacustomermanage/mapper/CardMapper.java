@@ -15,7 +15,7 @@ public interface CardMapper {
     /**
      * 通过用户编号获取信用卡信息
      * @param uid 用户编号
-     * @return 返回用户实体对象泛型集合
+     * @return 返回信用卡实体对象
      */
-    List<Card> getCardsByUid(Integer uid);
+    Card getCardByUid(Integer uid);
 }

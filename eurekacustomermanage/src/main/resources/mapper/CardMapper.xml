@@ -70,7 +70,7 @@
     </resultMap>
 
     <!--通过用户编号获取信用卡信息-->
-    <select id="getCardsByUid" resultMap="cardList">
+    <select id="getCardByUid" resultMap="cardList">
         select c.*,u.*
         from card c
         inner join users u

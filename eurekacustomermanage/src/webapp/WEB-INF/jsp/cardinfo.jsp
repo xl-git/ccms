@@ -15,7 +15,7 @@
             卡号：
         </td>
         <td>
-            <input name="cNum" type="text" value=""  />
+            <input name="cNum" type="text" value="${card.cNum}"  />
         </td>
     </tr>
     <tr>
@@ -38,7 +38,7 @@
             <a href="">卡别（种类）：</a>
         </td>
         <td>
-            <input name="cType" type="text" value=""  />
+            <input name="cType" type="text" value="${card.cType}"  />
         </td>
     </tr>
     <tr>
@@ -46,7 +46,7 @@
             持卡人：
         </td>
         <td>
-            <input name="cardholder" type="text" value=""  />
+            <input name="cardholder" type="text" value="${user.userName}"  />
         </td>
     </tr>
     <tr>
@@ -54,7 +54,7 @@
             开卡状态：
         </td>
         <td>
-            <input name="openStatus" type="text" value=""  />
+            <input name="openStatus" type="text" value="${card.openStatus}"  />
         </td>
     </tr>
 </table>
