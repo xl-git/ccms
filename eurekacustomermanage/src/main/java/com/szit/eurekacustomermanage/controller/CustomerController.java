@@ -82,8 +82,10 @@ public class CustomerController {
         String url="onlinepro";
         CreditCardInfo creditCardInfo=creditCardInfoService.getCreditCardInfoByCertificateNum(certificateNum);
         if(creditCardInfo!=null){
+            Card card=cardService.getCardByCcid(creditCardInfo.getCcid());
             model.addAttribute("creditCardInfo",creditCardInfo);
             model.addAttribute("certificateNum",certificateNum);
+            model.addAttribute("card",card);
             url="redirect:/onlineview.html";
         }
         return url;

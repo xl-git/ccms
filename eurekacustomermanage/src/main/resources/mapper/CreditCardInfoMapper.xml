@@ -6,7 +6,7 @@
 <mapper namespace="com.szit.eurekacustomermanage.mapper.CreditCardInfoMapper">
     <!-- 映射 -->
 
-    <!--通过用户名或者手机号查询用户信息-->
+    <!--通过证件号查询信用卡基本信息-->
     <select id="getCreditCardInfoByCertificateNum" resultType="com.szit.eurekacustomermanage.pojo.CreditCardInfo">
         select * from creditcardinfo cci
         inner join card c

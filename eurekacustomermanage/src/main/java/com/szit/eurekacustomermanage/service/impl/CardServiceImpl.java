@@ -27,6 +27,16 @@ public class CardServiceImpl implements CardService {
         return cardMapper.getCardByUid(uid);
     }
 
+    /**
+     * 通过信用卡基本信息编号获取信用卡信息
+     * @param ccid 信用卡基本信息编号
+     * @return 返回信用卡实体对象
+     */
+    @Override
+    public Card getCardByCcid(Integer ccid) {
+        return cardMapper.getCardByCcid(ccid);
+    }
+
     public CardMapper getCardMapper() {
         return cardMapper;
     }

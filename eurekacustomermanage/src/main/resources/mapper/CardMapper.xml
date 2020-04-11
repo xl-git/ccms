@@ -71,11 +71,20 @@
 
     <!--通过用户编号获取信用卡信息-->
     <select id="getCardByUid" resultMap="cardList">
-        select c.*,u.*
+        select c.*
         from card c
         inner join users u
         on c.uid=u.uid
         where c.uid=#{uid}
+    </select>
+
+    <!--通过基本信息编号获取信用卡信息-->
+    <select id="getCardByCcid" resultMap="cardList">
+        select c.*
+        from card c
+        inner join creditcardinfo cci
+        on c.ccid=cci.ccid
+        where c.ccid=#{ccid}
     </select>
 
 </mapper>
