@@ -1,8 +1,10 @@
 package com.szit.eurekacustomermanage.controller;
 
 import com.szit.eurekacustomermanage.pojo.Card;
+import com.szit.eurekacustomermanage.pojo.CreditCardInfo;
 import com.szit.eurekacustomermanage.pojo.User;
 import com.szit.eurekacustomermanage.service.CardService;
+import com.szit.eurekacustomermanage.service.CreditCardInfoService;
 import com.szit.eurekacustomermanage.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,6 +28,8 @@ public class CustomerController {
     private CardService cardService;
     @Autowired
     private RestTemplate restTemplate;
+    @Autowired
+    private CreditCardInfoService creditCardInfoService;
 
     /**
      * 跳转到用户客户管理首页
@@ -69,6 +73,22 @@ public class CustomerController {
         return url;
     }
 
+    /**
+     * 跳转到网上申请进度查询页面
+     * @return
+     */
+    @RequestMapping("/onlinepro.html")
+    protected String onlinepro(@RequestParam String certificateNum, Model model){
+        String url="onlinepro";
+        CreditCardInfo creditCardInfo=creditCardInfoService.getCreditCardInfoByCertificateNum(certificateNum);
+        if(creditCardInfo!=null){
+            model.addAttribute("creditCardInfo",creditCardInfo);
+            model.addAttribute("certificateNum",certificateNum);
+            url="redirect:/onlineview.html";
+        }
+        return url;
+    }
+
 
     public UserService getUserService() {
         return userService;
@@ -92,5 +112,13 @@ public class CustomerController {
 
     public void setRestTemplate(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
+    }
+
+    public CreditCardInfoService getCreditCardInfoService() {
+        return creditCardInfoService;
+    }
+
+    public void setCreditCardInfoService(CreditCardInfoService creditCardInfoService) {
+        this.creditCardInfoService = creditCardInfoService;
     }
 }

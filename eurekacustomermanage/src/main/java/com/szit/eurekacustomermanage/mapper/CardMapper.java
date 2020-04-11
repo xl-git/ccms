@@ -18,4 +18,11 @@ public interface CardMapper {
      * @return 返回信用卡实体对象
      */
     Card getCardByUid(Integer uid);
+
+    /**
+     * 通过信用卡基本信息编号获取信用卡信息
+     * @param ccid 信用卡基本信息编号
+     * @return 返回信用卡实体对象
+     */
+    Card getCardByCcid(Integer ccid);
 }

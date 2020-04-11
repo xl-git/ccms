@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.szit.eurekacustomermanage.mapper.CreditCardInfoMapper">
+    <!-- 映射 -->
+
+    <!--通过用户名或者手机号查询用户信息-->
+    <select id="getCreditCardInfoByCertificateNum" resultType="com.szit.eurekacustomermanage.pojo.CreditCardInfo">
+        select * from creditcardinfo cci
+        inner join card c
+        on cci.ccid=c.ccid
+        where certificatenum=#{certificateNum}
+    </select>
+
+</mapper>
