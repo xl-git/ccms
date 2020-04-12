@@ -87,4 +87,9 @@
         where c.ccid=#{ccid}
     </select>
 
+    <!-- 修改Email地址 -->
+    <update id="updateEmail" parameterType="com.szit.eurekacustomermanage.pojo.Card">
+		update card set email=#{email}
+		where cid=#{cid}
+	</update>
 </mapper>

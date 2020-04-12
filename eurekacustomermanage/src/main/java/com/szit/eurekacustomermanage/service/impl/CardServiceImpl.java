@@ -37,6 +37,16 @@ public class CardServiceImpl implements CardService {
         return cardMapper.getCardByCcid(ccid);
     }
 
+    /**
+     * 修改Email
+     * @param card 信用卡实体类
+     * @return 返回是否修改成功
+     */
+    @Override
+    public int updateEmail(Card card) {
+        return cardMapper.updateEmail(card);
+    }
+
     public CardMapper getCardMapper() {
         return cardMapper;
     }

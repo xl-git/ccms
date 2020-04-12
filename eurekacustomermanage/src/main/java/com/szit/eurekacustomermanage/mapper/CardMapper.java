@@ -25,4 +25,11 @@ public interface CardMapper {
      * @return 返回信用卡实体对象
      */
     Card getCardByCcid(Integer ccid);
+
+    /**
+     * 修改Email
+     * @param card 信用卡实体类
+     * @return 返回是否修改成功
+     */
+    int updateEmail(Card card);
 }
