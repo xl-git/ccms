@@ -5,30 +5,26 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Email地址设置页面</title>
+    <title>Email地址修改页面</title>
 </head>
 <body>
-    <h2>Email地址设置</h2>
+<h2>修改Email地址</h2>
+<form action="/updateemail.html" method="post" enctype="multipart/form-data">
     <table border="1" cellpadding="0" cellspacing="0">
         <tr>
             <td>
-                个人账户的Email地址：
+                Email地址：
             </td>
             <td>
-                <input name="email" type="text" value="${card.email}">
-            </td>
-            <td>
-                <a href="updateemail.html">修改</a>
+                <input id="email" name="email" type="text" value="${c.email}"/>
             </td>
         </tr>
         <tr>
-            <td>
-                绑定手机号：
-            </td>
-            <td>
-                <input type="text" name="phone" value="${creditCardInfo.phone}">
+            <td colspan="2" align="center">
+                <input type="submit" name="btnSubmit" value="确认修改" />
             </td>
         </tr>
     </table>
+</form>
 </body>
 </html>

@@ -91,6 +91,35 @@ public class CustomerController {
         return url;
     }
 
+    /**
+     * 跳转到邮箱设置页面
+     * @return
+     */
+    @RequestMapping("/emailset.html")
+    protected String emailset(Model model,HttpServletRequest request){
+        CreditCardInfo creditCardInfo=(CreditCardInfo) request.getSession().getAttribute("creditCardInfo");
+        Card card=(Card)request.getSession().getAttribute("card");
+        model.addAttribute("creditCardInfo",creditCardInfo);
+        model.addAttribute("card",card);
+        return "emailset";
+    }
+
+    /**
+     * 跳转到修改Email页面
+     * @param c
+     * @param model
+     * @return
+     */
+    protected String updateemail(Card c,Model model){
+        int flag=cardService.updateEmail(c);
+        String url="";
+        if(flag==1){
+            url="updateemail";
+        }else{
+            url="redirect:/emailset.html";
+        }
+        return url;
+    }
 
     public UserService getUserService() {
         return userService;
