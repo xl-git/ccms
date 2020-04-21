@@ -7,16 +7,9 @@
     <!-- 映射 -->
 
     <!--通过用户名或者手机号查询用户信息-->
-    <select id="getUserByUserNameOrTelphone" resultType="com.szit.eurekacustomermanage.pojo.User">
+    <select id="getUserByUserName" resultType="com.szit.eurekacustomermanage.pojo.User">
         select * from users
-        <where>
-            <if test="userName!=null and userName!=''">
-                AND username=#{userName}
-            </if>
-            <if test="telphone!=null and telphone!=''">
-                OR telphone=#{telphone}
-            </if>
-        </where>
+        where userName=#{userName}
     </select>
 
 </mapper>

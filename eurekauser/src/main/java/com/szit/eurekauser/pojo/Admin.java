@@ -8,6 +8,7 @@ import java.io.Serializable;
  * @version 1.0 2020-03-31
  */
 public class Admin implements Serializable {
+    private static final long serialVersionUID = -6670310829589223280L;
     private Integer aid;//编号；
     private String anum;//账号
     private String aPassword;//密码；

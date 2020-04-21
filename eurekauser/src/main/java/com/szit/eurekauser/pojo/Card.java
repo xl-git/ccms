@@ -8,6 +8,7 @@ import java.io.Serializable;
  *  @version 1.0 2020.03.31
  */
 public class Card implements Serializable {
+    private static final long serialVersionUID = -8105124598657591691L;
     private Integer cid;// 编号
 
     private String cNum;//卡号

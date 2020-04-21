@@ -11,6 +11,7 @@ import java.util.Date;
  * @version 1.0 2020-03-31
  */
 public class ChangePeriods implements Serializable {
+    private static final long serialVersionUID = -2533807993070004237L;
     private Integer cpid;//主键
     private Integer cid;//外键信用卡编号
     private Integer pid;//外键分期期数编号

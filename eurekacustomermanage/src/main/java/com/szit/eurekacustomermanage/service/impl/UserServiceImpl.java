@@ -19,11 +19,10 @@ public class UserServiceImpl implements UserService {
     /**
      * 通过用户名或者手机号获取用户信息
      * @param userName 用户名
-     * @param telphone 手机号
      * @return 返回用户实体对象
      */
-    public User getUserByUserNameOrTelphone(String userName, String telphone){
-        return userMapper.getUserByUserNameOrTelphone(userName,telphone);
+    public User getUserByUserName(String userName){
+        return userMapper.getUserByUserName(userName);
     }
 
     public UserMapper getUserMapper() {

@@ -1,0 +1,32 @@
+#userregister {
+    width: 100%;
+    text-align: center;
+}
+
+#userlogin {
+    width: 100%;
+    text-align: center;
+}
+.userm{
+    float: left;
+    background: #E0DA31;
+}
+a:hover{
+    font-size:20px;
+    color: #ff0000;
+}
+a{
+    font-size: 20px;
+    color: #000000;
+    text-decoration: none;
+}
+
+.no_circle{
+    list-style-type:none;  /*设置列表项标志的类型为无*/
+}
+#operation{
+    margin-top: 25px;
+    position: absolute;
+}
+
+

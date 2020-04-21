@@ -11,8 +11,7 @@ public interface UserService {
     /**
      * 通过用户名或者手机号获取用户信息
      * @param userName 用户名
-     * @param telphone 手机号
      * @return 返回用户实体对象
      */
-    User getUserByUserNameOrTelphone(String userName, String telphone);
+    User getUserByUserName(String userName);
 }

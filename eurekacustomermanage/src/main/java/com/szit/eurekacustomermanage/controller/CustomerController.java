@@ -1,5 +1,6 @@
 package com.szit.eurekacustomermanage.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.szit.eurekacustomermanage.pojo.Card;
 import com.szit.eurekacustomermanage.pojo.CreditCardInfo;
 import com.szit.eurekacustomermanage.pojo.User;
@@ -7,6 +8,7 @@ import com.szit.eurekacustomermanage.service.CardService;
 import com.szit.eurekacustomermanage.service.CreditCardInfoService;
 import com.szit.eurekacustomermanage.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,9 +16,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.util.Map;
 
 /**
  * 客户管理控制器类
+ *
  * @author 肖林
  * @version 1.0 2020-04-04
  */
@@ -30,93 +35,109 @@ public class CustomerController {
     private RestTemplate restTemplate;
     @Autowired
     private CreditCardInfoService creditCardInfoService;
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     /**
-     * 跳转到用户客户管理首页
+     * 跳转到用户客户综合管理首页
+     *
      * @return
      */
     @RequestMapping("/customermanage.html")
-    protected String customermanage(){
+    public String customermanage(HttpSession httpSession) {
+//        System.out.println("我来了");
         return "customermanage";
     }
 
     /**
      * 跳转到基本账户信息页面
+     *
      * @return
      */
     @RequestMapping("/accountinfo.html")
-    protected String accountinfo(Model model, HttpServletRequest request){
-        String url="";
-        User user=(User)request.getSession().getAttribute("loginUser");
-        if(user!=null){
-            Card card=cardService.getCardByUid(user.getUid());
-            model.addAttribute("card",card);
-            url= "accountinfo";
+    public String accountinfo(Model model, HttpSession session) {
+//        System.out.println("111");
+        String url = "";
+        String username = (String) redisTemplate.opsForValue().get("loginUser");
+        System.out.println(username);
+        User user = userService.getUserByUserName(username);
+
+        System.out.println("用户名：" + user.getUserName());
+        if (user != null) {
+            Card card = cardService.getCardByUid(user.getUid());
+            model.addAttribute("card", card);
+            url = "accountinfo";
         }
+//        System.out.println("222");
         return url;
+
     }
 
     /**
      * 跳转到账户下卡片信息页面
+     *
      * @return
      */
     @RequestMapping("/cardinfo.html")
-    protected String cardinfo(Model model, HttpServletRequest request){
-        String url="";
-        User user=(User)request.getSession().getAttribute("loginUser");
-        if(user!=null){
-            Card card=cardService.getCardByUid(user.getUid());
-            model.addAttribute("card",card);
-            model.addAttribute("user",user);
-            url= "cardinfo";
+    protected String cardinfo(Model model, HttpServletRequest request) {
+        String url = "";
+        User user = (User) request.getSession().getAttribute("loginUser");
+        if (user != null) {
+            Card card = cardService.getCardByUid(user.getUid());
+            model.addAttribute("card", card);
+            model.addAttribute("user", user);
+            url = "cardinfo";
         }
         return url;
     }
 
     /**
      * 跳转到网上申请进度查询页面
+     *
      * @return
      */
     @RequestMapping("/onlinepro.html")
-    protected String onlinepro(@RequestParam String certificateNum, Model model){
-        String url="onlinepro";
-        CreditCardInfo creditCardInfo=creditCardInfoService.getCreditCardInfoByCertificateNum(certificateNum);
-        if(creditCardInfo!=null){
-            Card card=cardService.getCardByCcid(creditCardInfo.getCcid());
-            model.addAttribute("creditCardInfo",creditCardInfo);
-            model.addAttribute("certificateNum",certificateNum);
-            model.addAttribute("card",card);
-            url="redirect:/onlineview.html";
+    protected String onlinepro(@RequestParam String certificateNum, Model model) {
+        String url = "onlinepro";
+        CreditCardInfo creditCardInfo = creditCardInfoService.getCreditCardInfoByCertificateNum(certificateNum);
+        if (creditCardInfo != null) {
+            Card card = cardService.getCardByCcid(creditCardInfo.getCcid());
+            model.addAttribute("creditCardInfo", creditCardInfo);
+            model.addAttribute("certificateNum", certificateNum);
+            model.addAttribute("card", card);
+            url = "redirect:/onlineview.html";
         }
         return url;
     }
 
     /**
      * 跳转到邮箱设置页面
+     *
      * @return
      */
     @RequestMapping("/emailset.html")
-    protected String emailset(Model model,HttpServletRequest request){
-        CreditCardInfo creditCardInfo=(CreditCardInfo) request.getSession().getAttribute("creditCardInfo");
-        Card card=(Card)request.getSession().getAttribute("card");
-        model.addAttribute("creditCardInfo",creditCardInfo);
-        model.addAttribute("card",card);
+    protected String emailset(Model model, HttpServletRequest request) {
+        CreditCardInfo creditCardInfo = (CreditCardInfo) request.getSession().getAttribute("creditCardInfo");
+        Card card = (Card) request.getSession().getAttribute("card");
+        model.addAttribute("creditCardInfo", creditCardInfo);
+        model.addAttribute("card", card);
         return "emailset";
     }
 
     /**
      * 跳转到修改Email页面
+     *
      * @param c
      * @param model
      * @return
      */
-    protected String updateemail(Card c,Model model){
-        int flag=cardService.updateEmail(c);
-        String url="";
-        if(flag==1){
-            url="updateemail";
-        }else{
-            url="redirect:/emailset.html";
+    protected String updateemail(Card c, Model model) {
+        int flag = cardService.updateEmail(c);
+        String url = "";
+        if (flag == 1) {
+            url = "updateemail";
+        } else {
+            url = "redirect:/emailset.html";
         }
         return url;
     }
