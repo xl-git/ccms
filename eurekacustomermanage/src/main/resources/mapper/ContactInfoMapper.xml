@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.szit.eurekacustomermanage.mapper.ContactInfoMapper">
+    <!-- 映射 -->
+    <resultMap type="com.szit.eurekacustomermanage.pojo.ContactInfo" id="contactInfoList">
+        <result property="id" column="id" />
+        <result property="contactName" column="contactName" />
+        <result property="contactIphone" column="contactIphone" />
+        <result property="email" column="email" />
+        <result property="relation" column="relation" />
+        <result property="userId" column="userId" />
+        <association property="user" javaType="com.szit.eurekacustomermanage.pojo.User">
+            <id property="id" column="id" />
+            <result property="userName" column="userName" />
+            <result property="userPwd" column="userPwd" />
+            <result property="telphone" column="telphone" />
+            <result property="loginDate" column="loginDate" />
+            <result property="score" column="score" />
+        </association>
+    </resultMap>
+
+    <!--通过证件号查询信用卡基本信息-->
+    <select id="getContactInfoByUserId" resultMap="contactInfoList">
+        select ci.* from contactinfo ci
+        inner join user u
+        on ci.userId=u.id
+        where ci.userId=#{userId}
+    </select>
+
+    <update id="updateEmail">
+        update  contactInfo set email=#{email} where userId=#{userId}
+    </update>
+</mapper>

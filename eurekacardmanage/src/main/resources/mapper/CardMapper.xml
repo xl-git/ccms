@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.szit.eurekacardmanage.mapper.CardMapper">
+    <!-- 添加信用卡信息-->
+    <resultMap id="cardList" type="com.szit.eurekacardmanage.pojo.CreditCard">
+        <result property="id" column="id"></result>
+        <result property="cardNum" column="cardNum"></result>
+        <result property="payPassword" column="payPassword"></result>
+        <result property="userId" column="userId"></result>
+        <association property="baseInfo" javaType="com.szit.eurekacardmanage.pojo.BaseInfo">
+            <result property="identityCard" column="identityCard"></result>
+            <result property="userId" column="userId"></result>
+        </association>
+    </resultMap>
+    <insert id="addCard">
+
+    </insert>
+
+    <!--添加基本信息-->
+    <insert id="addBaseInfo" parameterType="com.szit.eurekacardmanage.pojo.BaseInfo">
+        insert into baseinfo(name,identityCard,iphoneNum,answer,homeAddress
+        ,nation,marriage,education,baseMail,questionId,userId,familyAddress)
+        values(#{name},#{identityCard},#{iphoneNum},#{answer},#{homeAddress}
+        ,#{nation},#{marriage},#{education},#{baseMail},#{questionId},#{userId},#{familyAddress})
+    </insert>
+
+
+    <!--添加单位信息-->
+    <insert id="addUnitInfo" parameterType="com.szit.eurekacardmanage.pojo.UnitInfo">
+        insert into unitinfo(companyName,companyTpe,unitIphone,unitAddress,yearIncome,duty,unitMail,userId)
+        values(#{companyName},#{companyTpe},#{unitIphone},#{unitAddress},#{yearIncome},#{duty},#{unitMail},#{userId})
+    </insert>
+
+    <!--添加联系人信息-->
+    <insert id="addContactInfo" parameterType="com.szit.eurekacardmanage.pojo.ContactInfo">
+        insert into contactinfo(contactName,contactIphone,email,relation,userId)
+        values(#{contactName},#{contactIphone},#{email},#{relation},#{userId})
+    </insert>
+
+    <!--添加卡片申请信息-->
+    <insert id="addOpenStatus" parameterType="com.szit.eurekacardmanage.pojo.OpenStatus">
+        insert into openstatus(userId,status,opDate,cardType)
+        values(#{userId},#{status},#{opDate},#{cardType})
+    </insert>
+
+    <!--修改卡片状态id-->
+    <update id="updateCardStatusIdByCardNum">
+        update creditcard set cardStatus=#{cardStatus} where cardNum=#{cardNum}
+    </update>
+
+    <!--修改卡片交易密码-->
+    <update id="updatePayPasswordByCardNum">
+        update creditcard set payPassword=#{newPassword} where cardNum=#{cardNum} and payPassword=#{oldPassword} and userId=#{userId}
+    </update>
+
+    <!--根据卡号获取信用卡信息-->
+    <select id="searchCardByCardNumAndUserId" resultMap="cardList">
+        select cc.*,bi.* from creditCard cc
+        inner join baseinfo bi
+        on cc.userId=bi.userId
+        where cc.userId=#{userId} and bi.cardNum=#{cardNum}
+    </select>
+
+    <!--通过用户名获取用户信息-->
+    <select id="getUserByUserName" parameterType="String" resultType="com.szit.eurekacardmanage.pojo.User">
+        select * from user where username=#{userName}
+    </select>
+</mapper>

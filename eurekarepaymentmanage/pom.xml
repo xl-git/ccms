@@ -46,6 +46,7 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+            <version>2.2.2.RELEASE</version>
         </dependency>
 
         <!-- mybatis依赖包 -->
@@ -79,7 +80,7 @@
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
             <artifactId>mybatis-spring-boot-starter</artifactId>
-            <version>1.3.1</version>
+            <version>2.1.2</version>
         </dependency>
 
         <!-- 添加Log4j2日志依赖包 -->
@@ -124,20 +125,44 @@
             <scope>compile</scope>
         </dependency>
 
+        <!--手机依赖-->
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-netflix-hystrix-dashboard</artifactId>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.15</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.12</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpcore</artifactId>
+            <version>4.4.13</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.6</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-util</artifactId>
+            <version>9.3.7.v20160115</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.5</version>
+            <scope>test</scope>
+        </dependency>
+
 
         <!-- 添加Hystrix监控信息 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-netflix-zuul</artifactId>
         </dependency>
 
         <dependency>
@@ -155,7 +180,6 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-netflix-eureka-client</artifactId>
             <version>2.2.2.RELEASE</version>
-            <scope>compile</scope>
         </dependency>
     </dependencies>
 
@@ -206,5 +230,6 @@
             </plugin>
         </plugins>
     </build>
+
 
 </project>

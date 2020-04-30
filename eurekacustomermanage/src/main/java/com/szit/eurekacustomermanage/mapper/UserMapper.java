@@ -15,4 +15,6 @@ public interface UserMapper {
      * @return 返回用户实体对象
      */
     User getUserByUserName(String userName);
+
+    User getUserById(Integer id);
 }

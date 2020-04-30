@@ -6,30 +6,20 @@ import com.szit.eurekastaging.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Service("UserService")
+@Service("userService")
 public class UserServiceImpl implements UserService {
     @Autowired
-    private UserMapper usermapper;
-
-    /**
-     * 通过用户名或者手机号获取用户信息
-     * @param userName 用户名
-     * @param telphone 手机号
-     * @return 返回用户实体对象
-     */
-
-    public User getUserByUserNameOrTelphone(String userName, String telphone) {
-        return usermapper.getUserByUserNameOrTelphone(userName,telphone);
+    private UserMapper userMapper;
+    @Override
+    public User getByuserName(String userName) {
+        return userMapper.getByuserName(userName);
     }
 
-    public UserMapper getUsermapper() {
-        return usermapper;
+    public UserMapper getUserMapper() {
+        return userMapper;
     }
 
-    public void setUsermapper(UserMapper usermapper) {
-        this.usermapper = usermapper;
+    public void setUserMapper(UserMapper userMapper) {
+        this.userMapper = userMapper;
     }
-
-
-
 }

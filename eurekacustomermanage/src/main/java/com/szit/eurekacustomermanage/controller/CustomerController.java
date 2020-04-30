@@ -1,12 +1,7 @@
 package com.szit.eurekacustomermanage.controller;
 
-import com.alibaba.fastjson.JSONObject;
-import com.szit.eurekacustomermanage.pojo.Card;
-import com.szit.eurekacustomermanage.pojo.CreditCardInfo;
-import com.szit.eurekacustomermanage.pojo.User;
-import com.szit.eurekacustomermanage.service.CardService;
-import com.szit.eurekacustomermanage.service.CreditCardInfoService;
-import com.szit.eurekacustomermanage.service.UserService;
+import com.szit.eurekacustomermanage.pojo.*;
+import com.szit.eurekacustomermanage.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
@@ -17,7 +12,7 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.Map;
+import java.util.List;
 
 /**
  * 客户管理控制器类
@@ -30,66 +25,68 @@ public class CustomerController {
     @Autowired
     private UserService userService;
     @Autowired
-    private CardService cardService;
+    private CreditCardService creditCardService;
     @Autowired
     private RestTemplate restTemplate;
     @Autowired
-    private CreditCardInfoService creditCardInfoService;
+    private BaseInfoService baseInfoService;
     @Autowired
     private RedisTemplate redisTemplate;
+    @Autowired
+    private OpenStatusService openStatusService;
+    @Autowired
+    private ContactInfoService contactInfoService;
 
-    /**
-     * 跳转到用户客户综合管理首页
-     *
-     * @return
-     */
-    @RequestMapping("/customermanage.html")
-    public String customermanage(HttpSession httpSession) {
-//        System.out.println("我来了");
-        return "customermanage";
-    }
 
     /**
      * 跳转到基本账户信息页面
      *
      * @return
      */
-    @RequestMapping("/accountinfo.html")
-    public String accountinfo(Model model, HttpSession session) {
-//        System.out.println("111");
+    @RequestMapping("/customerselect.html")
+    public String customerselect(@RequestParam(value = "pageIndex", required = false) Integer pageIndex,Model model) {
         String url = "";
         String username = (String) redisTemplate.opsForValue().get("loginUser");
-        System.out.println(username);
         User user = userService.getUserByUserName(username);
+
+        PageIndexer page = new PageIndexer(1, 2, 0, 0);
+        if (pageIndex != null) {
+            page.setPageIndex(pageIndex);
+        }
 
         System.out.println("用户名：" + user.getUserName());
         if (user != null) {
-            Card card = cardService.getCardByUid(user.getUid());
-            model.addAttribute("card", card);
-            url = "accountinfo";
+            List<CreditCard> creditCards = creditCardService.getCreditCardsByUserId(user.getId(),page);
+            model.addAttribute("creditCards", creditCards);
+            model.addAttribute("user",user);
+            model.addAttribute("pi",page);
+            url = "customerselect";
         }
-//        System.out.println("222");
         return url;
-
     }
 
-    /**
-     * 跳转到账户下卡片信息页面
-     *
-     * @return
-     */
     @RequestMapping("/cardinfo.html")
-    protected String cardinfo(Model model, HttpServletRequest request) {
+    public String cardinfo(@RequestParam(value = "pageIndex", required = false) Integer pageIndex,Model model) {
         String url = "";
-        User user = (User) request.getSession().getAttribute("loginUser");
+        String username = (String) redisTemplate.opsForValue().get("loginUser");
+        User user = userService.getUserByUserName(username);
+
+        PageIndexer page = new PageIndexer(1, 2, 0, 0);
+        if (pageIndex != null) {
+            page.setPageIndex(pageIndex);
+        }
+
+        System.out.println("用户名：" + user.getUserName());
         if (user != null) {
-            Card card = cardService.getCardByUid(user.getUid());
-            model.addAttribute("card", card);
-            model.addAttribute("user", user);
+            List<CreditCard> creditCards = creditCardService.getCreditCardsByUserId(user.getId(),page);
+            model.addAttribute("creditCards", creditCards);
+            model.addAttribute("user",user);
+            model.addAttribute("pi",page);
             url = "cardinfo";
         }
         return url;
     }
+
 
     /**
      * 跳转到网上申请进度查询页面
@@ -97,17 +94,25 @@ public class CustomerController {
      * @return
      */
     @RequestMapping("/onlinepro.html")
-    protected String onlinepro(@RequestParam String certificateNum, Model model) {
-        String url = "onlinepro";
-        CreditCardInfo creditCardInfo = creditCardInfoService.getCreditCardInfoByCertificateNum(certificateNum);
-        if (creditCardInfo != null) {
-            Card card = cardService.getCardByCcid(creditCardInfo.getCcid());
-            model.addAttribute("creditCardInfo", creditCardInfo);
-            model.addAttribute("certificateNum", certificateNum);
-            model.addAttribute("card", card);
-            url = "redirect:/onlineview.html";
+    public String onlinepro(@RequestParam(value = "queryIdentityCard",required = false) String queryIdentityCard, @RequestParam(value = "pageIndex", required = false) Integer pageIndex,Model model) {
+        BaseInfo baseInfo=baseInfoService.getBaseInfoByIdentityCard(queryIdentityCard);
+        PageIndexer page = new PageIndexer(1, 5, 0, 0);
+        if (pageIndex != null) {
+            page.setPageIndex(pageIndex);
         }
-        return url;
+
+        if (baseInfo!= null) {
+            System.out.println("666");
+            List<OpenStatus> openStatuss=openStatusService.getOpenStatusByUserId(baseInfo.getUserId(),page);
+            User u=userService.getUserById(baseInfo.getUserId());
+            model.addAttribute("openStatuss", openStatuss);
+            System.out.println(openStatuss.size());
+            model.addAttribute("queryIdentityCard", queryIdentityCard);
+            model.addAttribute("baseInfo", baseInfo);
+            model.addAttribute("pi",page);
+            model.addAttribute("u",u);
+        }
+        return "onlinepro";
     }
 
     /**
@@ -116,29 +121,36 @@ public class CustomerController {
      * @return
      */
     @RequestMapping("/emailset.html")
-    protected String emailset(Model model, HttpServletRequest request) {
-        CreditCardInfo creditCardInfo = (CreditCardInfo) request.getSession().getAttribute("creditCardInfo");
-        Card card = (Card) request.getSession().getAttribute("card");
-        model.addAttribute("creditCardInfo", creditCardInfo);
-        model.addAttribute("card", card);
+    protected String emailset(Model model) {
+        String username = (String) redisTemplate.opsForValue().get("loginUser");
+        User user = userService.getUserByUserName(username);
+        ContactInfo contactInfo = contactInfoService.getContactInfoByUserId(user.getId());
+        model.addAttribute("contactInfo", contactInfo);
         return "emailset";
     }
 
     /**
      * 跳转到修改Email页面
      *
-     * @param c
-     * @param model
      * @return
      */
-    protected String updateemail(Card c, Model model) {
-        int flag = cardService.updateEmail(c);
-        String url = "";
-        if (flag == 1) {
-            url = "updateemail";
-        } else {
-            url = "redirect:/emailset.html";
+    @RequestMapping("/updateemail.html")
+    protected String updateemail(@RequestParam(value = "queryEmail" ,required = false) String queryEmail, Model model) {
+        System.out.println(queryEmail);
+        String msg="";
+        String url = "updateemail";
+        String username = (String) redisTemplate.opsForValue().get("loginUser");
+        User user = userService.getUserByUserName(username);
+        if(queryEmail!=null){
+            boolean flag=contactInfoService.updateEmail(queryEmail,user.getId());
+            if (flag) {
+                msg="修改成功！";
+                url = "redirect:/emailset.html";
+            }
+            msg="系统异常，修改失败！";
         }
+        model.addAttribute("msg",msg);
+        model.addAttribute("queryEmail",queryEmail);
         return url;
     }
 
@@ -150,12 +162,12 @@ public class CustomerController {
         this.userService = userService;
     }
 
-    public CardService getCardService() {
-        return cardService;
+    public CreditCardService getCreditCardService() {
+        return creditCardService;
     }
 
-    public void setCardService(CardService cardService) {
-        this.cardService = cardService;
+    public void setCreditCardService(CreditCardService creditCardService) {
+        this.creditCardService = creditCardService;
     }
 
     public RestTemplate getRestTemplate() {
@@ -166,11 +178,35 @@ public class CustomerController {
         this.restTemplate = restTemplate;
     }
 
-    public CreditCardInfoService getCreditCardInfoService() {
-        return creditCardInfoService;
+    public BaseInfoService getBaseInfoService() {
+        return baseInfoService;
     }
 
-    public void setCreditCardInfoService(CreditCardInfoService creditCardInfoService) {
-        this.creditCardInfoService = creditCardInfoService;
+    public void setBaseInfoService(BaseInfoService creditCardInfoService) {
+        this.baseInfoService = baseInfoService;
+    }
+
+    public RedisTemplate getRedisTemplate() {
+        return redisTemplate;
+    }
+
+    public void setRedisTemplate(RedisTemplate redisTemplate) {
+        this.redisTemplate = redisTemplate;
+    }
+
+    public OpenStatusService getOpenStatusService() {
+        return openStatusService;
+    }
+
+    public void setOpenStatusService(OpenStatusService openStatusService) {
+        this.openStatusService = openStatusService;
+    }
+
+    public ContactInfoService getContactInfoService() {
+        return contactInfoService;
+    }
+
+    public void setContactInfoService(ContactInfoService contactInfoService) {
+        this.contactInfoService = contactInfoService;
     }
 }

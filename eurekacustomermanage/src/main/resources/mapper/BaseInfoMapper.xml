@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.szit.eurekacustomermanage.mapper.BaseInfoMapper">
+    <!-- 映射 -->
+    <resultMap type="com.szit.eurekacustomermanage.pojo.BaseInfo" id="baseInfoList">
+        <result property="id" column="id" />
+        <result property="name" column="name" />
+        <result property="identityCard" column="identityCard" />
+        <result property="iphoneNum" column="iphoneNum" />
+        <result property="answer" column="answer" />
+        <result property="homeAddress" column="homeAddress" />
+        <result property="nation" column="nation" />
+        <result property="marriage" column="marriage" />
+        <result property="education" column="education" />
+        <result property="baseMail" column="baseMail" />
+        <result property="familyAddress" column="familyAddress" />
+        <result property="questionId" column="questionId" />
+        <result property="userId" column="userId" />
+        <association property="user" javaType="com.szit.eurekacustomermanage.pojo.User">
+            <id property="id" column="id" />
+            <result property="userName" column="userName" />
+            <result property="userPwd" column="userPwd" />
+            <result property="telphone" column="telphone" />
+            <result property="loginDate" column="loginDate" />
+            <result property="score" column="score" />
+        </association>
+        <association property="question" javaType="com.szit.eurekacustomermanage.pojo.Question">
+            <id property="id" column="id" />
+            <result property="question" column="question" />
+        </association>
+    </resultMap>
+
+    <!--通过证件号查询信用卡基本信息-->
+    <select id="getBaseInfoByIdentityCard" resultMap="baseInfoList">
+        select bi.* from baseinfo bi
+        inner join user u
+        on bi.userId=u.id
+        where bi.identityCard=#{identityCard}
+    </select>
+</mapper>

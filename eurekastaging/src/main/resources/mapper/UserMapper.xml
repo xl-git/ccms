@@ -3,6 +3,11 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.szit.eurekastaging.mapper.UserMapper">
+    <!-- 映射 -->
 
-
+    <!--通过用户名或者手机号查询用户信息-->
+    <select id="getByuserName" resultType="com.szit.eurekastaging.pojo.User">
+        select * from user
+        where userName=#{userName}
+    </select>
 </mapper>

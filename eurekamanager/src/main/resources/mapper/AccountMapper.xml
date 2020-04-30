@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.szit.eurekamanager.mapper.AccountMapper">
+    <!-- 映射 -->
+    <resultMap type="com.szit.eurekamanager.pojo.CreditCard" id="cardList">
+        <result property="id" column="id" />
+        <result property="cardNum" column="cardNum" />
+        <result property="payPassword" column="payPassword" />
+        <result property="useableLimit" column="useableLimit" />
+        <result property="creditLimit" column="creditLimit" />
+        <association property="user" javaType="com.szit.eurekamanager.pojo.User">
+            <id property="id" column="id" />
+            <result property="userPwd" column="userpwd" />
+            <result property="telphone" column="telphone"/>
+        </association>
+        <association property="baseInfo" javaType="com.szit.eurekamanager.pojo.BaseInfo">
+            <id property="id" column="id" />
+            <result property="name" column="name" />
+            <result property="identityCard" column="identityCard"/>
+            <result property="iphoneNum" column="iphoneNum"/>
+            <result property="familyAddress" column="familyAddress"/>
+            <result property="homeAddress" column="homeAddress"/>
+            <result property="marriage" column="marriage"/>
+            <result property="answer" column="answer"/>
+            <result property="baseMail" column="baseMail"/>
+            <result property="education" column="education"/>
+            <result property="userId" column="userId"/>
+        </association>
+        <association property="unitInfo" javaType="com.szit.eurekamanager.pojo.UnitInfo">
+            <id property="id" column="id" />
+            <result property="companyName" column="companyName" />
+            <result property="companyTpe" column="companyTpe"/>
+            <result property="unitIphone" column="unitIphone"/>
+            <result property="unitAddress" column="unitAddress"/>
+            <result property="yearIncome" column="yearIncome"/>
+            <result property="duty" column="duty"/>
+            <result property="unitMail" column="unitMail"/>
+        </association>
+        <association property="contactInfo" javaType="com.szit.eurekamanager.pojo.ContactInfo">
+            <id property="id" column="id" />
+            <result property="contactName" column="contactName" />
+            <result property="contactIphone" column="contactIphone"/>
+            <result property="email" column="email"/>
+            <result property="relation" column="relation"/>
+        </association>
+        <association property="question" javaType="com.szit.eurekamanager.pojo.Question">
+            <id property="id" column="id" />
+            <result property="question" column="question" />
+        </association>
+        <association property="changePeriods" javaType="com.szit.eurekamanager.pojo.ChangePeriods">
+            <id property="id" column="id" />
+            <result property="periodsId" column="periodsId" />
+            <result property="rate" column="rate" />
+            <result property="amount" column="amount" />
+            <result property="changeDate" column="changeDate" />
+            <result property="amount" column="amount" />
+            <result property="changeStatus" column="changeStatus" />
+        </association>
+        <association property="transaction" javaType="com.szit.eurekamanager.pojo.Transaction">
+            <id property="id" column="id" />
+            <result property="transMoney" column="transMoney" />
+            <result property="transDate" column="transDate" />
+            <result property="transAddress" column="transAddress" />
+            <result property="abstracts" column="abstract" />
+            <result property="cardId" column="cardId" />
+        </association>
+    </resultMap>
+
+    <!--分页列出所有账户-->
+    <select id="getAccountsByPage" resultMap="cardList">
+        SELECT * FROM baseinfo b
+        inner join creditcard c
+        on b.userid = c.userid
+        where 1 = 1
+        <if test="cardNum != null">
+            and c.cardNum like concat('%',#{cardNum},'%')
+        </if>
+        limit #{from},#{pageSize}
+    </select>
+
+    <!-- 查询分页记录总数,以便求总页数 -->
+    <select id="getCountsByPage" resultType="int">
+        SELECT count(*) FROM baseinfo b
+        inner join creditcard c
+        on b.userid = c.userid
+        where 1 = 1
+        <if test="cardNum != null">
+            and c.cardNum like concat('%',#{cardNum},'%')
+        </if>
+    </select>
+
+    <!--查询账户详情-->
+    <select id="getAccountDetails" resultMap="cardList">
+        SELECT * FROM baseInfo b
+        INNER JOIN creditcard c
+        ON c.userid = b.userId
+        INNER JOIN question q
+        ON q.id = b.questionId
+        INNER JOIN unitinfo u
+        ON u.userid = b.userid
+        WHERE c.cardnum = #{cardNum}
+    </select>
+
+    <!--分页查询历史交易-->
+    <select id="getHistoryTransactionsByPage" resultMap="cardList">
+        SELECT * FROM TRANSACTION t
+        INNER JOIN creditcard c
+        ON c.id = t.cardId
+        INNER JOIN baseinfo b
+        ON b.userid = c.userid
+        WHERE 1=1
+        <if test="cardNum != null ">
+            and c.cardNum like concat('%',#{cardNum},'%')
+        </if>
+        limit #{from},#{pageSize}
+    </select>
+
+    <!-- 查询分页历史交易记录总数,以便求总页数 -->
+    <select id="getCounts" resultType="int">
+        SELECT COUNT(*)
+        FROM TRANSACTION t
+        INNER JOIN creditcard c
+        ON c.id = t.cardId
+        INNER JOIN baseinfo b
+        ON b.userid = c.userid
+        WHERE 1=1
+        <if test="cardNum != null ">
+            and c.cardNum like concat('%',#{cardNum},'%')
+        </if>
+    </select>
+
+    <select id="getHistoryDetails" resultMap="cardList">
+        select * from TRANSACTION t
+        inner join creditcard c
+        on c.id = t.cardid
+        inner join baseInfo b
+        on b.userid = c.userid
+        where t.transDate = #{transDate}
+        and c.cardNum = #{cardNum}
+    </select>
+
+</mapper>

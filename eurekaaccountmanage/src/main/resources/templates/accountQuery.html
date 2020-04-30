@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<div>
+			<form>
+				<table>
+					<tr>
+						<th style="text-align:right">币种：</th>
+						<th><input type="text" readonly th:value="${creditCard.currency}" value="RMB"></th>
+					</tr>
+					<tr>
+						<th style="text-align:right">信用额度：</th>
+						<th><input type="text" readonly th:value="${creditCard.creditLimit}" value="15,000"></th>
+					</tr>
+					<tr>
+						<th style="text-align:right">可用额度：</th>
+						<th><input type="text" readonly th:value="${creditCard.useableLimit}" value="8,550"></th>
+					</tr>
+					<tr>
+						<th style="text-align:right">未出账分期本金：</th>
+						<th><input type="text" readonly th:value="${creditCard.changeLimit}" value="1,000"></th>
+					</tr>
+					<div>
+						<h3>账户信息</h3>
+						<hr>
+							<tr>
+								<th style="text-align:right">每月账单日：</th>
+								<th><input type="text" readonly th:value="${creditCard.outDate}" value="12日">日</th>
+							</tr>
+							<tr>
+								<th style="text-align:right">可用额度：</th>
+								<th><input type="text" readonly th:value="${creditCard.useableLimit}" value="8,550"></th>
+							</tr>
+							<tr>
+								<th style="text-align:right">账单类型：</th>
+								<th><input type="text" readonly value="电子邮件寄送"></th>
+							</tr>
+						</table>
+					</div>
+					<br/>
+					<br>
+						<div>
+							<h3>还款信息</h3>
+							<hr />
+							<table>
+								<tr>
+									<th style="text-align:right">自动还款：</th>
+									<th><input type="text" readonly value="未开通"></th>
+								</tr>
+								<tr>
+									<th style="text-align:right">本期到账还款日：</th>
+									<th><input type="text" readonly th:value="${creditCard.changeLimit}" value="1日"></th>
+								</tr>
+								<tr>
+									<th style="text-align:right">本期账单金额：</th>
+									<th><input type="text" readonly th:value="${alreadyMoney}" value="6,450"></th>
+									<th><a href="/accountManage/alreadyAccount.html">查看已出账单</a>/<a href="# n">申请分期</a></th>
+								</tr>
+								<tr>
+									<th style="text-align:right">本期剩余应还金额：</th>
+									<th><input type="text" readonly th:value="${money}" value="2,000"></th>
+									<th style="text-align:left"><a href="/accountManage/notAccount.html">查看未出账单</a></th>
+								</tr>
+							</table>
+						</div>
+						<br>
+					
+					</div>
+				</table>
+			</form>
+		</div>
+	</body>
+</html>
+	

@@ -38,16 +38,16 @@
       <form action="/user/usernamelogin.html" method="post" class="user_login_error">
         <div id="username">
           <label>用户名：</label>
-          <input type="text" id="user_username_hide" name="user_username_hide" value="" nullmsg="用户名不能为空！" datatype="s2-10" errormsg="用户名范围在2~10个字符之间！" sucmsg="用户名验证通过！"/>
+          <input type="text" id="user_username_hide" name="user_username_hide" value="" nullmsg="用户名不能为空！" datatype="s2-10" errormsg="用户名范围在2~10个字符之间！" sucmsg="用户名格式验证通过！"/>
           <!--ajaxurl="demo/valid.jsp"--> 
         </div>
         <div id="password">
           <label>密&nbsp;&nbsp;&nbsp;码：</label>
-          <input type="password" id="user_password_hide" name="user_password_hide" value="" nullmsg="密码不能为空！" datatype="*6-20" errormsg="密码范围在6~20位之间！" sucmsg="密码验证通过！"/>
+          <input type="password" id="user_password_hide" name="user_password_hide" value="" nullmsg="密码不能为空！" datatype="*6-20" errormsg="密码范围在6~20位之间！"/>
         </div>
         <div id="code">
           <label>验证码：</label>
-          <input type="text" id="user_code_hide" name="user_code_hide"  value="" nullmsg="验证码不能为空！" datatype="*4-4" errormsg="验证码有6位数！" sucmsg="验证码验证通过！"/>
+          <input type="text" id="user_code_hide" name="user_code_hide"  value="" nullmsg="验证码不能为空！" datatype="*4-4" errormsg="验证码有4位数！" sucmsg="验证码格式验证通过！"/>
           <img id="image" name="image" src="/user/img.html" onclick="javascript:refresh(this);"/>
         </div>
         <div id="login">

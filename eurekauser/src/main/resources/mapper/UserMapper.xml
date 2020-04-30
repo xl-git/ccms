@@ -5,22 +5,22 @@
 <mapper namespace="com.szit.eurekauser.mapper.UserMapper">
     <!--通过手机号查询用户信息  -->
     <select id="getUserBytelphone" resultType="com.szit.eurekauser.pojo.User" parameterType="String">
-        select * from users where telphone=#{telphone}
+        select * from user where telphone=#{telphone}
     </select>
 
     <!--通过用户名查询用户信息  -->
     <select id="getUserByUserName" resultType="com.szit.eurekauser.pojo.User" parameterType="String">
-        select * from users where username=#{userName}
+        select * from user where username=#{userName}
     </select>
 
     <!-- 添加用户 -->
     <insert id="addUser" parameterType="com.szit.eurekauser.pojo.User">
-		insert into users (telphone,userName,uPassword)
-		values(#{telphone},#{userName},#{uPassword})
+		insert into user (telphone,userName,userPwd)
+		values(#{telphone},#{userName},#{userPwd})
 	</insert>
 
     <!-- 添加用户 -->
     <update id="updateUser" parameterType="com.szit.eurekauser.pojo.User">
-		update  users set logindate =now() where username = #{userName}
+		update  user set logindate =now() where username = #{userName}
 	</update>
 </mapper>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.szit.eurekastaging.mapper.CreditCardMapper">
+    <!-- 映射 -->
+    <resultMap type="com.szit.eurekastaging.pojo.CreditCard" id="creditCardList">
+        <result property="id" column="id" />
+        <result property="cardNum" column="cardNum" />
+        <result property="cardType" column="cardType" />
+        <result property="creditLimit" column="creditLimit" />
+        <result property="useableLimit" column="useableLimit" />
+        <result property="alreadyLimit" column="alreadyLimit" />
+        <result property="overdueAmount" column="overdueAmount" />
+        <result property="changeLimit" column="changeLimit" />
+        <result property="outDate" column="outDate" />
+        <result property="inDate" column="inDate" />
+        <result property="payPassword" column="payPassword" />
+        <result property="currency" column="currency" />
+        <result property="openDate" column="openDate" />
+        <result property="userId" column="userId" />
+        <result property="cardStatusId" column="cardStatusId" />
+        <association property="user" javaType="com.szit.eurekastaging.pojo.User">
+            <id property="id" column="id" />
+            <result property="userName" column="userName" />
+            <result property="userPwd" column="userPwd" />
+            <result property="telphone" column="telphone" />
+            <result property="loginDate" column="loginDate" />
+            <result property="score" column="score" />
+        </association>
+        <association property="cardStatus" javaType="com.szit.eurekastaging.pojo.CardStatus">
+            <id property="id" column="id" />
+            <result property="status" column="status" />
+        </association>
+    </resultMap>
+
+    <!--通过id查看是否办卡-->
+    <select id="getByuserId" resultMap="creditCardList ">
+        select * from CreditCard c
+        inner join user u
+        on c.userid=u.id where c.userid=#{userId}
+        limit #{from},#{pageSize}
+    </select>
+
+    <select id="getAll" resultType="int">
+        select count(*) from CreditCard c
+        inner join user u on c.userid=u.id where c.userid=#{userId}
+    </select>
+
+    <select id="getCardById" resultMap="creditCardList">
+        select * from creditCard where id=#{id}
+    </select>
+</mapper>

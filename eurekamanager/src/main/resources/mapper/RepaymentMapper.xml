@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.szit.eurekamanager.mapper.RMapper">
+    <!-- 映射 -->
+    <resultMap id="repaymentList" type="com.szit.eurekamanager.pojo.Repayment">
+        <id property="id" column="id" />
+        <result property="cardId" column="cardid"/>
+        <result property="rmoney" column="rmoney"/>
+        <result property="duedate" column="duedate"/>
+        <result property="debitCardId" column="debitcardid"/>
+        <result property="changePeriodsId" column="changeperiodsid"/>
+    
+        <association property="creditCard" javaType="com.szit.eurekamanager.pojo.CreditCard">
+            <id property="id" column="id" />
+            <result property="cardNum" column="cardnum" />
+            <result property="cardType" column="cardtype" />
+            <result property="creditLimit" column="creditlimit " />
+            <result property="useableLimit" column="useablelimit" />
+            <result property="alreadyLimit" column="alreadylimit" />
+            <result property="overdueAmount" column="overdueamount" />
+            <result property="changeLimit" column="changelimit" />
+            <result property="outDate" column="outdate" />
+            <result property="inDate" column="indate" />
+            <result property="payPassword" column="paypassword" />
+            <result property="currency" column="currency" />
+            <result property="openDate" column="opendate" />
+            <result property="userId" column="userid" />
+            <result property="cardStatusId" column="cardstatusId" />
+
+        </association>
+
+
+        <association property="debitCard" javaType="com.szit.eurekamanager.pojo.DebitCard">
+            <id property="id" column="id"/>
+            <result property="debitCardId" column="debitCardNum" />
+            <result property="payPassword" column="paypassword" />
+            <result property="balance" column="balance" />
+            <result property="userId" column="userid" />
+        </association>
+
+        <association property="baseInfo" javaType="com.szit.eurekamanager.pojo.BaseInfo">
+            <id property="id" column="id"/>
+            <result property="name" column="name"/>
+            <result property="identityCard" column="identityCard"/>
+            <result property="userId" column="userid"/>
+        </association>
+
+        <association property="changePeriods" javaType="com.szit.eurekamanager.pojo.ChangePeriods">
+            <id property="id" column="id"/>
+            <result property="periodsId" column="periodsid" />
+            <result property="rate" column="rate" />
+            <result property="amount" column="amount" />
+            <result property="changeDate" column="changedate" />
+            <result property="changeStatus" column="changestatus" />
+            <result property="cardId" column="cardid" />
+        </association>
+
+
+    </resultMap>
+
+    <!-- 查询还款记录表集合 -->
+    <select id="getRepayments" resultMap="repaymentList">
+        select r.*,c.*,b.* ,d.*,f.* from repayment r
+        inner join creditcard c
+        on r.cardid=c.id
+        inner join baseinfo b
+        on c.userid=b.userid
+        inner join debitcard d
+        on r.debitcardid=d.id
+        inner join changePeriods f
+        on c.id=f.cardid
+        where 1=1
+        <if test="cardNum!=null and cardNum!=''">
+            and c.cardNum=#{cardNum}
+        </if>
+        <if test="identityId!=null and identityId!=''">
+            and b.identityCard=#{identityId}
+        </if>
+        limit #{from},#{pageSize}
+    </select>
+
+    <select id="getAll" resultType="int">
+        select count(*) from repayment r
+        inner join creditcard c
+        on r.cardid=c.id
+        inner join baseinfo b
+        on c.userid=b.userid
+        inner join debitcard d
+        on r.debitcardid=d.id
+        where 1=1
+        <if test="cardNum!=null and cardNum!=''">
+            and c.cardNum=#{cardNum}
+        </if>
+        <if test="identityId!=null and identityId!=''">
+            and b.identityCard=#{identityId}
+        </if>
+    </select>
+
+    <!-- 通过用户ID查询基本信息表集合 -->
+    <select id="getBaseInfosByid" resultType="com.szit.eurekamanager.pojo.BaseInfo">
+        select * from baseinfo where userid=#{id}
+
+    </select>
+</mapper>

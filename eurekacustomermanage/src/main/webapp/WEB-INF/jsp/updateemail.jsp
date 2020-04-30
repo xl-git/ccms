@@ -8,23 +8,22 @@
     <title>Email地址修改页面</title>
 </head>
 <body>
-<h2>修改Email地址</h2>
-<form action="/updateemail.html" method="post" enctype="multipart/form-data">
-    <table border="1" cellpadding="0" cellspacing="0">
-        <tr>
-            <td>
-                Email地址：
-            </td>
-            <td>
-                <input id="email" name="email" type="text" value="${c.email}"/>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2" align="center">
-                <input type="submit" name="btnSubmit" value="确认修改" />
-            </td>
-        </tr>
-    </table>
-</form>
+<center>
+    <h2>修改Email地址</h2>
+    <form action="/customermanage/updateemail.html" method="post" enctype="multipart/form-data">
+        <table>
+            <tr>
+                <td>Email地址：</td>
+                <td><input name="queryEmail" type="text" value="${queryEmail}"/></td>
+            </tr>
+            <tr></tr>
+            <tr>
+                <td><input type="submit" name="btnSubmit" value="确认修改" /></td>
+                <td><input type="reset" name="btnReset" value="取消修改"/></td>
+            </tr>
+        </table>
+        <div style="color: red;">${msg}</div>
+    </form>
+</center>
 </body>
 </html>

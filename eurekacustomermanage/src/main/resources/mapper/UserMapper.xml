@@ -8,8 +8,12 @@
 
     <!--通过用户名或者手机号查询用户信息-->
     <select id="getUserByUserName" resultType="com.szit.eurekacustomermanage.pojo.User">
-        select * from users
+        select * from user
         where userName=#{userName}
     </select>
 
+    <select id="getUserById" resultType="com.szit.eurekacustomermanage.pojo.User">
+        select * from user
+        where id=#{id}
+    </select>
 </mapper>

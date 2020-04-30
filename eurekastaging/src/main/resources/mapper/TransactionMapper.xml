@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.szit.eurekastaging.mapper.TransactionMapper">
+    <!-- 映射 -->
+    <resultMap type="com.szit.eurekastaging.pojo.Transaction" id="transaction">
+        <result property="id" column="id" />
+        <result property="transMoney" column="transMoney" />
+        <result property="transAddress" column="transAddress" />
+        <result property="abstract" column="abstract" />
+        <result property="cardId" column="cardId" />
+        <association property="creditCard" javaType="com.szit.eurekastaging.pojo.CreditCard">
+            <id property="id" column="id" />
+            <result property="cardNum" column="cardNum"/>
+        </association>
+    </resultMap>
+    
+    <select id="getTransMoneyByCardId" resultType="double">
+        select COALESCE(sum(transMoney),0.0) from transaction
+        where cardId=#{cardId} and
+        transDate between #{fromDate} and #{nowDate}
+
+    </select>
+
+    <select id="getCountByDate" resultType="int">
+        select count(*) from changeperiods where cardId=#{cardId}
+        and changedate between #{fromDate} and #{nowDate}
+    </select>
+
+</mapper>

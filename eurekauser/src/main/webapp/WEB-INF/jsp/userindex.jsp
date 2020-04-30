@@ -26,7 +26,7 @@
 		<div class="userm" align="center" style="width:16%">
 			<a id="submeau" href="javascript:;" >客户管理</a>
 			<div id="myDiv" style="display: none">
-				<li class="no_circle"><a href="http://localhost:8004/customermanage/customermanage.html">客户综合查询</a></li>
+				<li class="no_circle"><a>客户综合查询</a></li>
 				<li class="no_circle"><a>网上申请进度查询</a></li>
 				<li class="no_circle"><a>Email地址设置</a></li>
 			</div>

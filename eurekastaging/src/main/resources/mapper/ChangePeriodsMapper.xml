@@ -2,7 +2,68 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="">
+<mapper namespace="com.szit.eurekastaging.mapper.ChangePeriodsMapper">
+    <!-- 映射 -->
+    <resultMap type="com.szit.eurekastaging.pojo.ChangePeriods" id="changePeriodsList">
+            <result property="id" column="id"/>
+            <result property="periodsId" column="periodsId"/>
+            <result property="rate" column="rate"/>
+            <result property="amount" column="amount"/>
+            <result property="changeDate" column="changeDate"/>
+            <result property="cardId" column="cardId"/>
+        <association property="creditCard" javaType="com.szit.eurekastaging.pojo.CreditCard">
+            <result property="id" column="id" />
+            <result property="cardNum" column="cardNum" />
+            <result property="cardType" column="cardType" />
+            <result property="creditLimit" column="creditLimit" />
+            <result property="useableLimit" column="useableLimit" />
+            <result property="alreadyLimit" column="alreadyLimit" />
+            <result property="overdueAmount" column="overdueAmount" />
+            <result property="changeLimit" column="changeLimit" />
+            <result property="outDate" column="outDate" />
+            <result property="inDate" column="inDate" />
+            <result property="payPassword" column="payPassword" />
+            <result property="currency" column="currency" />
+            <result property="openDate" column="openDate" />
+            <result property="userId" column="userId" />
+            <result property="cardStatusId" column="cardStatusId" />
+        </association>
 
+
+    </resultMap>
+    <insert id="addChangePeriods" >
+        insert into changeperiods(periodsId,rate,amount,changeDate,changeStatus,cardId)
+        values(#{changePeriods.periodsId},#{changePeriods.rate},#{changePeriods.amount},#{changePeriods.changeDate},#{changePeriods.changeStatus},#{changePeriods.cardId});
+    </insert>
+
+    <select id="getChangePeriodsBychangeDate" parameterType="Date" resultMap="changePeriodsList">
+        select * from changeperiods c inner join creditCard g on c.cardid=g.id where dayofyear(c.changeDate)=dayofyear(now()) and year(c.changeDate)=year(now())
+    </select>
+
+    <select id="getChangePeriodsBycardId"  resultMap="changePeriodsList">
+        select * from changeperiods c inner join  creditcard g on c.cardid=g.id where g.userid=#{userId}
+        <if test="lowdate!=null and highdate==null">
+               and c.changeDate&gt;#{lowdate}
+        </if>
+        <if test="highdate!=null and lowdate==null">
+            and c.changeDate&lt;#{highdate}
+        </if>
+        <if test="highdate!=null and lowdate!=null">
+            and c.changeDate between #{lowdate} and #{highdate}
+        </if>
+        limit #{from},#{pageSize}
+    </select>
+    <select id="getCounts" resultType="int">
+        select count(*) from changeperiods c inner join  creditcard g on c.cardid=g.id where g.userid=#{userId}
+        <if test="lowdate!=null and highdate==null">
+            and c.changeDate&gt;#{lowdate}
+        </if>
+        <if test="highdate!=null and lowdate==null">
+            and c.changeDate&lt;#{highdate}
+        </if>
+        <if test="highdate!=null and lowdate!=null">
+            and c.changeDate between #{lowdate} and #{highdate}
+        </if>
+    </select>
 
 </mapper>

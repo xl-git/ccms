@@ -18,21 +18,17 @@ spring:
   # mysql数据库连接
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/ccms_db?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&serverTimezone=GMT
+    url: jdbc:mysql://localhost:3306/ccms?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&serverTimezone=GMT
     username: root
     password: root
 
   # 配置Redis服务器
   redis:
-    database: 0
+    database: 1
     host: 127.0.0.1
     port: 6379
-    user: root
-    password: 123
-
-  # 访问ActiveMQ服务器：ActiveMQ消息队列配置.(如果用内置的ActiveMQ，就不需要配置如下代码)
-  activemq:
-    broker-url: tcp://10.1.10.165:61616
+#    user: root
+#    password: 123
 
   # jsp配置
   mvc:

@@ -16,6 +16,7 @@ public class EurekastagingApplication {
         SpringApplication.run(EurekastagingApplication.class, args);
         System.out.println("分期服务器已启动!");
     }
+
     @Bean
     public RestTemplate restTemplate(){
         return new RestTemplate();

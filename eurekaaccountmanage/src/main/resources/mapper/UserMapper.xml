@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.szit.eurekaaccountmanage.mapper.UserMapper">
+    <resultMap id="userList" type="User">
+        <id property="id" column="id"></id>
+        <result property="userName" column="userName"></result>
+        <result property="userPwd" column="userPwd"></result>
+        <result property="telphone" column="telphone"></result>
+        <result property="loginDate" column="loginDate"></result>
+        <result property="score" column="score"></result>
+    </resultMap>
+
+    <select id="getUserByUserName" resultType="User" >
+        select * from `user` where userName=#{userName}
+    </select>
+
+</mapper>

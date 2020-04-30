@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.szit.eurekamanager.mapper.AdminMapper">
+    <!--通过账号查询Admin信息  -->
+    <select id="getAdminByadminName" resultType="com.szit.eurekamanager.pojo.Admin" parameterType="String">
+        select * from admin where adminName=#{adminName}
+    </select>
+
+    <!-- 映射 -->
+    <resultMap type="com.szit.eurekamanager.pojo.CreditCard" id="cardList">
+        <result property="id" column="id" />
+        <result property="cardNum" column="cardNum" />
+        <result property="payPassword" column="payPassword" />
+        <association property="user" javaType="com.szit.eurekamanager.pojo.User">
+            <id property="id" column="id" />
+            <result property="userPwd" column="userpwd" />
+            <result property="telphone" column="telphone"/>
+        </association>
+        <association property="baseInfo" javaType="com.szit.eurekamanager.pojo.BaseInfo">
+            <id property="id" column="id" />
+            <result property="name" column="name" />
+            <result property="identityCard" column="identityCard"/>
+            <result property="iphoneNum" column="iphoneNum"/>
+            <result property="familyAddress" column="familyAddress"/>
+            <result property="homeAddress" column="homeAddress"/>
+            <result property="marriage" column="marriage"/>
+            <result property="answer" column="answer"/>
+            <result property="baseMail" column="baseMail"/>
+            <result property="education" column="education"/>
+            <result property="userId" column="userId"/>
+        </association>
+        <association property="unitInfo" javaType="com.szit.eurekamanager.pojo.UnitInfo">
+            <id property="id" column="id" />
+            <result property="companyName" column="companyName" />
+            <result property="companyTpe" column="companyTpe"/>
+            <result property="unitIphone" column="unitIphone"/>
+            <result property="unitAddress" column="unitAddress"/>
+            <result property="yearIncome" column="yearIncome"/>
+            <result property="duty" column="duty"/>
+            <result property="unitMail" column="unitMail"/>
+        </association>
+        <association property="contactInfo" javaType="com.szit.eurekamanager.pojo.ContactInfo">
+            <id property="id" column="id" />
+            <result property="contactName" column="contactName" />
+            <result property="contactIphone" column="contactIphone"/>
+            <result property="email" column="email"/>
+            <result property="relation" column="relation"/>
+        </association>
+        <association property="cardStatus" javaType="com.szit.eurekamanager.pojo.CardStatus">
+            <id property="id" column="id" />
+            <result property="status" column="status" />
+        </association>
+    </resultMap>
+
+    <!--通过卡号查询信用卡信息  -->
+    <select id="getCardByCardNum" resultMap="cardList">
+        select * from creditcard c
+        inner join user u
+        on c.userid = u.id
+        inner join baseinfo b
+        on b.userid = u.id
+        inner join cardStatus cs
+        on cs.id = c.cardStatusid
+        inner join unitInfo un
+        on un.userid = u.id
+        inner join contactInfo ct
+        on ct.userid = u.id
+        where c.cardnum = #{cardNum}
+    </select>
+
+    <!-- 修改交易密码-->
+    <update id="updatePwd" parameterType="com.szit.eurekamanager.pojo.CreditCard">
+        update creditcard set payPassword = #{payPassword}
+        where cardNum = #{cardNum}
+    </update>
+
+    <!-- 修改用户单位信息-->
+    <update id="updateUnit">
+        update unitinfo set unitAddress = #{unitAddress}, unitIphone = #{unitIphone}
+        where userid = (SELECT u.id FROM creditcard c
+        INNER JOIN USER u
+        ON c.userid = u.id
+        WHERE c.cardnum = #{cardNum})
+    </update>
+
+    <!-- 修改信用卡基本信息-->
+    <update id="updateBaseInfo">
+        update baseInfo set iphoneNum = #{iphoneNum},education = #{education},
+        homeAddress = #{homeAddress},familyAddress = #{familyAddress}
+        where userid = (SELECT u.id FROM creditcard c
+        INNER JOIN USER u
+        ON c.userid = u.id
+        WHERE c.cardnum = #{cardNum})
+    </update>
+
+    <!-- 修改邮箱信息-->
+    <update id="updateEmail" parameterType="com.szit.eurekamanager.pojo.ContactInfo">
+        update contactInfo set email = #{email}
+        where userid = (SELECT u.id FROM creditcard c
+        INNER JOIN USER u
+        ON c.userid = u.id
+        WHERE c.cardnum = #{cardNum})
+    </update>
+
+
+    <!--通过身份证号查询信用卡信息-->
+    <select id="getCardByIdentityCard" resultMap="cardList">
+        SELECT * FROM creditcard c
+        inner join baseinfo b
+        on b.userid = c.userid
+        inner join cardStatus s
+        on c.cardStatusid = s.id
+        WHERE b.identityCard = #{identityCard}
+        limit #{from},#{pageSize}
+    </select>
+
+    <select id="getCounts" resultType="int">
+        SELECT count(*) FROM creditcard c
+        inner join baseinfo b
+        on b.userid = c.userid
+        inner join cardStatus s
+        on c.cardStatusid = s.id
+        WHERE identityCard = #{identityCard}
+    </select>
+
+    <!--挂失-->
+    <update id="loseHandle" parameterType="String">
+        update creditCard set cardStatusId = 5 where cardNum = #{cardNum}
+    </update>
+
+    <!--冻结-->
+    <update id="freeze" parameterType="String">
+        update creditCard set cardStatusId = 4 where cardNum = #{cardNum}
+    </update>
+
+    <!--销户-->
+    <update id="cancel" parameterType="String">
+        update creditCard set cardStatusId = 6 where cardNum = #{cardNum}
+    </update>
+
+    <!--激活，解除挂失,冻结,销卡-->
+    <update id="relieve" parameterType="String">
+        update creditCard set cardStatusId = 2 where cardNum = #{cardNum}
+    </update>
+    <!---->
+    <select id="getActivateLists" resultType="com.szit.eurekamanager.pojo.Noactivate">
+        SELECT b.userId,c.cardNum,b.name,b.identityCard,b.iphonenum,s.status FROM baseinfo b
+        INNER JOIN creditcard c
+        ON b.userid = c.userId
+        INNER JOIN cardstatus s
+        ON s.id = c.cardStatusId
+        WHERE c.cardStatusId=1
+        limit #{from},#{pageSize}
+    </select>
+
+    <select id="getActivateCounts" resultType="int">
+        SELECT count(*) FROM baseinfo b
+        INNER JOIN creditcard c
+        ON b.userid = c.userId
+        INNER JOIN cardstatus s
+        ON s.id = c.cardStatusId
+        WHERE c.cardStatusId=1;
+    </select>
+</mapper>

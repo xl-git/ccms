@@ -6,7 +6,11 @@
         </Console>
     </appenders>
     <loggers>
+<<<<<<< HEAD
+        <root level="OFF">
+=======
         <root level="all">
+>>>>>>> 758a1c3ee5a58496c4a138a72a636ccf215c7ac8
             <appender-ref ref="Console" />
         </root>
     </loggers>

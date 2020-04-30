@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService {
         boolean isLogin=false;
         User returnUser =userMapper.getUserByUserName(user.getUserName());
         if(returnUser!=null){
-            if(user.getuPassword().equals(returnUser.getuPassword())) {
+            if(user.getUserPwd().equals(returnUser.getUserPwd())) {
                 user.setLoginDate(returnUser.getLoginDate());
                 isLogin=true;
             }

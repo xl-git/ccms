@@ -1,68 +1,82 @@
 package com.szit.eurekastaging.pojo;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
- * 工作人员实体类
- * @author 刘成发
- * @version 1.0 2020-03-31
+ * 管理员实体类
  */
 public class Admin implements Serializable {
-    private Integer aid;//编号；
-    private String anum;//账号
-    private String aPassword;//密码；
-    private Integer pid;//权限编号
-    private Power power;//权限外键
+    private Integer id;//--主键
+    private String adminName;//--管理员用户名
+    private String adminPwd;//--密码
+    private Integer grade;//--管理员等级;（可选值1、2、3）
 
     public Admin() {
-        power=new Power();
     }
 
-    public Admin(Integer aid, String anum, String aPassword, Integer pid, Power power) {
-        this.aid = aid;
-        this.anum = anum;
-        this.aPassword = aPassword;
-        this.pid = pid;
-        this.power = power;
+    public Admin(Integer id, String adminName, String adminPwd, Integer grade) {
+        this.id = id;
+        this.adminName = adminName;
+        this.adminPwd = adminPwd;
+        this.grade = grade;
     }
 
-    public Integer getAid() {
-        return aid;
+    public Integer getId() {
+        return id;
     }
 
-    public void setAid(Integer aid) {
-        this.aid = aid;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public String getAnum() {
-        return anum;
+    public String getAdminName() {
+        return adminName;
     }
 
-    public void setAnum(String anum) {
-        this.anum = anum;
+    public void setAdminName(String adminName) {
+        this.adminName = adminName;
     }
 
-    public String getaPassword() {
-        return aPassword;
+    public String getAdminPwd() {
+        return adminPwd;
     }
 
-    public void setaPassword(String aPassword) {
-        this.aPassword = aPassword;
+    public void setAdminPwd(String adminPwd) {
+        this.adminPwd = adminPwd;
     }
 
-    public Integer getPid() {
-        return pid;
+    public Integer getGrade() {
+        return grade;
     }
 
-    public void setPid(Integer pid) {
-        this.pid = pid;
+    public void setGrade(Integer grade) {
+        this.grade = grade;
     }
 
-    public Power getPower() {
-        return power;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Admin admin = (Admin) o;
+        return Objects.equals(id, admin.id) &&
+                Objects.equals(adminName, admin.adminName) &&
+                Objects.equals(adminPwd, admin.adminPwd) &&
+                Objects.equals(grade, admin.grade);
     }
 
-    public void setPower(Power power) {
-        this.power = power;
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, adminName, adminPwd, grade);
+    }
+
+    @Override
+    public String toString() {
+        return "Admin{" +
+                "id=" + id +
+                ", adminName='" + adminName + '\'' +
+                ", adminPwd='" + adminPwd + '\'' +
+                ", grade=" + grade +
+                '}';
     }
 }

@@ -1,110 +1,120 @@
 package com.szit.eurekacustomermanage.pojo;
 
-import javax.smartcardio.Card;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 
 /**
- *交易信息表实体类
- * @author 艾邓枫
- * @version 1.0 2020.03.31
+ * 交易信息实体类
  */
 public class Transaction implements Serializable {
-    private Integer tid; //编号
-    private Integer tcid; //卡id
-    private Double tMoney; //交易金额
-    private Date tDate; //交易时间
-    private String tStaus; //交易类型
-    private String tAddress; //交易地点
-    private String digest;  //交易摘要
-    private Date billDate; //出账日期
+    private Integer id;//--主键
+    private Double transMoney;//--交易金额
+    private Date transDate;//--交易时间
+    private String transAddress;//--交易地点
+    private String abstracts;//--交易摘要（交易类型）
+    private Integer cardId;//--信用卡外键id
 
-    private Card card; //信用卡实体类
+    private CreditCard creditCard;//信用卡实体类对象
 
     public Transaction() {
     }
 
-    public Transaction(Integer tid, Integer tcid, Double tMoney, Date tDate, String tStaus, String tAddress, String digest, Date billDate, Card card) {
-        this.tid = tid;
-        this.tcid = tcid;
-        this.tMoney = tMoney;
-        this.tDate = tDate;
-        this.tStaus = tStaus;
-        this.tAddress = tAddress;
-        this.digest = digest;
-        this.billDate = billDate;
-        this.card = card;
+    public Transaction(Integer id, Double transMoney, Date transDate, String transAddress, String abstracts, Integer cardId, CreditCard creditCard) {
+        this.id = id;
+        this.transMoney = transMoney;
+        this.transDate = transDate;
+        this.transAddress = transAddress;
+        this.abstracts = abstracts;
+        this.cardId = cardId;
+        this.creditCard = creditCard;
     }
 
-    public Integer getTid() {
-        return tid;
+    public Integer getId() {
+        return id;
     }
 
-    public void setTid(Integer tid) {
-        this.tid = tid;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public Integer getTcid() {
-        return tcid;
+    public Double getTransMoney() {
+        return transMoney;
     }
 
-    public void setTcid(Integer tcid) {
-        this.tcid = tcid;
+    public void setTransMoney(Double transMoney) {
+        this.transMoney = transMoney;
     }
 
-    public Double gettMoney() {
-        return tMoney;
+    public Date getTransDate() {
+        return transDate;
     }
 
-    public void settMoney(Double tMoney) {
-        this.tMoney = tMoney;
+    public void setTransDate(Date transDate) {
+        this.transDate = transDate;
     }
 
-    public Date gettDate() {
-        return tDate;
+    public String getTransAddress() {
+        return transAddress;
     }
 
-    public void settDate(Date tDate) {
-        this.tDate = tDate;
+    public void setTransAddress(String transAddress) {
+        this.transAddress = transAddress;
     }
 
-    public String gettStaus() {
-        return tStaus;
+    public String getAbstracts() {
+        return abstracts;
     }
 
-    public void settStaus(String tStaus) {
-        this.tStaus = tStaus;
+    public void setAbstracts(String abstracts) {
+        this.abstracts = abstracts;
     }
 
-    public String gettAddress() {
-        return tAddress;
+    public Integer getCardId() {
+        return cardId;
     }
 
-    public void settAddress(String tAddress) {
-        this.tAddress = tAddress;
+    public void setCardId(Integer cardId) {
+        this.cardId = cardId;
     }
 
-    public String getDigest() {
-        return digest;
+    public CreditCard getCreditCard() {
+        return creditCard;
     }
 
-    public void setDigest(String digest) {
-        this.digest = digest;
+    public void setCreditCard(CreditCard creditCard) {
+        this.creditCard = creditCard;
     }
 
-    public Date getBillDate() {
-        return billDate;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Transaction that = (Transaction) o;
+        return Objects.equals(id, that.id) &&
+                Objects.equals(transMoney, that.transMoney) &&
+                Objects.equals(transDate, that.transDate) &&
+                Objects.equals(transAddress, that.transAddress) &&
+                Objects.equals(abstracts, that.abstracts) &&
+                Objects.equals(cardId, that.cardId) &&
+                Objects.equals(creditCard, that.creditCard);
     }
 
-    public void setBillDate(Date billDate) {
-        this.billDate = billDate;
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, transMoney, transDate, transAddress, abstracts, cardId, creditCard);
     }
 
-    public Card getCard() {
-        return card;
-    }
-
-    public void setCard(Card card) {
-        this.card = card;
+    @Override
+    public String toString() {
+        return "Transaction{" +
+                "id=" + id +
+                ", transMoney=" + transMoney +
+                ", transDate=" + transDate +
+                ", transAddress='" + transAddress + '\'' +
+                ", abstracts='" + abstracts + '\'' +
+                ", cardId=" + cardId +
+                ", creditCard=" + creditCard +
+                '}';
     }
 }

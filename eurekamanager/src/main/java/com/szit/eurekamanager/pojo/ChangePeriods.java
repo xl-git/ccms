@@ -1,102 +1,132 @@
 package com.szit.eurekamanager.pojo;
 
-import javax.smartcardio.Card;
 import java.io.Serializable;
-import java.time.Period;
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * 分期信息实体类
- * @author 刘鑫垚
- * @version 1.0 2020-03-31
  */
 public class ChangePeriods implements Serializable {
-    private Integer cpid;//主键
-    private Integer cid;//外键信用卡编号
-    private Integer pid;//外键分期期数编号
-    private Integer cpMoney;//申请分期金额
-    private Date cpDate;//申请分期时间
-    private String cpStatus;//状态
+    private Integer id;//--主键
+    private Integer periodsId;//--期数(3期、6期、12期)
+    private Double rate;//--利率(3期1.95%、6期3.6%、12期7.2%)
+    private Double amount;//--分期金额
+    private Date changeDate;//	--申请时间
+    private Integer changeStatus;//--分期状态（1为未还、2为已还）
+    private Integer cardId;//--信用卡外键id
 
-    private Card card;//信用卡实体类
-    private Periods periods;//期数实体类
+    private CreditCard creditCard;//信用卡实体类对象
 
     public ChangePeriods() {
-        periods=new Periods();
     }
 
-    public ChangePeriods(Integer cpid, Integer cid, Integer pid, Integer cpMoney, Date cpDate, String cpStatus, Card card, Periods periods) {
-        this.cpid = cpid;
-        this.cid = cid;
-        this.pid = pid;
-        this.cpMoney = cpMoney;
-        this.cpDate = cpDate;
-        this.cpStatus = cpStatus;
-        this.card = card;
-        this.periods = periods;
+    public ChangePeriods(Integer id, Integer periodsId, Double rate, Double amount, Date changeDate, Integer changeStatus, Integer cardId, CreditCard creditCard) {
+        this.id = id;
+        this.periodsId = periodsId;
+        this.rate = rate;
+        this.amount = amount;
+        this.changeDate = changeDate;
+        this.changeStatus = changeStatus;
+        this.cardId = cardId;
+        this.creditCard = creditCard;
     }
 
-    public Integer getCpid() {
-        return cpid;
+    public Integer getId() {
+        return id;
     }
 
-    public void setCpid(Integer cpid) {
-        this.cpid = cpid;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public Integer getCid() {
-        return cid;
+    public Integer getPeriodsId() {
+        return periodsId;
     }
 
-    public void setCid(Integer cid) {
-        this.cid = cid;
+    public void setPeriodsId(Integer periodsId) {
+        this.periodsId = periodsId;
     }
 
-    public Integer getPid() {
-        return pid;
+    public Double getRate() {
+        return rate;
     }
 
-    public void setPid(Integer pid) {
-        this.pid = pid;
+    public void setRate(Double rate) {
+        this.rate = rate;
     }
 
-    public Integer getCpMoney() {
-        return cpMoney;
+    public Double getAmount() {
+        return amount;
     }
 
-    public void setCpMoney(Integer cpMoney) {
-        this.cpMoney = cpMoney;
+    public void setAmount(Double amount) {
+        this.amount = amount;
     }
 
-    public Date getCpDate() {
-        return cpDate;
+    public Date getChangeDate() {
+        return changeDate;
     }
 
-    public void setCpDate(Date cpDate) {
-        this.cpDate = cpDate;
+    public void setChangeDate(Date changeDate) {
+        this.changeDate = changeDate;
     }
 
-    public String getCpStatus() {
-        return cpStatus;
+    public Integer getChangeStatus() {
+        return changeStatus;
     }
 
-    public void setCpStatus(String cpStatus) {
-        this.cpStatus = cpStatus;
+    public void setChangeStatus(Integer changeStatus) {
+        this.changeStatus = changeStatus;
     }
 
-    public Card getCard() {
-        return card;
+    public Integer getCardId() {
+        return cardId;
     }
 
-    public void setCard(Card card) {
-        this.card = card;
+    public void setCardId(Integer cardId) {
+        this.cardId = cardId;
     }
 
-    public Periods getPeriods() {
-        return periods;
+    public CreditCard getCreditCard() {
+        return creditCard;
     }
 
-    public void setPeriods(Periods periods) {
-        this.periods = periods;
+    public void setCreditCard(CreditCard creditCard) {
+        this.creditCard = creditCard;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ChangePeriods that = (ChangePeriods) o;
+        return Objects.equals(id, that.id) &&
+                Objects.equals(periodsId, that.periodsId) &&
+                Objects.equals(rate, that.rate) &&
+                Objects.equals(amount, that.amount) &&
+                Objects.equals(changeDate, that.changeDate) &&
+                Objects.equals(changeStatus, that.changeStatus) &&
+                Objects.equals(cardId, that.cardId) &&
+                Objects.equals(creditCard, that.creditCard);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, periodsId, rate, amount, changeDate, changeStatus, cardId, creditCard);
+    }
+
+    @Override
+    public String toString() {
+        return "ChangePeriods{" +
+                "id=" + id +
+                ", periodsId=" + periodsId +
+                ", rate=" + rate +
+                ", amount=" + amount +
+                ", changeDate=" + changeDate +
+                ", changeStatus=" + changeStatus +
+                ", cardId=" + cardId +
+                ", creditCard=" + creditCard +
+                '}';
     }
 }

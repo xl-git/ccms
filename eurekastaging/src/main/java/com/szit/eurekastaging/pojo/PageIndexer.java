@@ -17,7 +17,7 @@ public class PageIndexer implements Serializable {
 		
 	}
 	
-	public PageIndexer(Integer pageIndex,Integer pageSize,Integer pageCount,Integer count){
+	public PageIndexer(Integer pageIndex, Integer pageSize, Integer pageCount, Integer count){
 		this.pageIndex=pageIndex;
 		this.pageSize=pageSize;
 		this.pageCount=pageCount;

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.szit.eurekamanager.mapper.CardMapper">
+
+    <!-- 映射 -->
+    <resultMap type="com.szit.eurekamanager.pojo.OpenStatus" id="openStatusList">
+        <result column="id" property="id"></result>
+        <result column="userId" property="userId"></result>
+        <result column="status" property="status"></result>
+        <result column="opdate" property="opDate"></result>
+        <result property="cardType" column="cardType"></result>
+        <association property="user" javaType="com.szit.eurekamanager.pojo.User">
+            <id property="id" column="uid"></id>
+            <result property="userName" column="userName"></result>
+            <result property="score" column="score"></result>
+        </association>
+    </resultMap>
+
+    <insert id="addCard" parameterType="com.szit.eurekamanager.pojo.CreditCard">
+        insert into creditCard(cardNum,cardType,creditLimit,useableLimit,openDate,cardStatusId,userId)
+        values(#{cardNum},#{cardType},#{creditLimit},#{useableLimit},#{openDate},2,#{userId})
+    </insert>
+
+    <!--修改信用卡申请状态-->
+    <update id="updateOpenStatus">
+        update openstatus set status=#{status} where userId=#{userId} and status='待审核'
+    </update>
+
+    <!--清除基本信息-->
+    <delete id="deleteBaseinfo">
+        delete from baseinfo where id=#{id}
+    </delete>
+    <!--清除单位本信息-->
+    <delete id="deleteUnitinfo">
+        delete from unitinfo where id=#{id}
+    </delete>
+    <!--清除联系人信息-->
+    <delete id="deleteContactinfo">
+        delete from contactinfo where id=#{id}
+    </delete>
+
+    <select id="getMaxBaseinfoId" resultType="Integer" parameterType="Integer">
+        select max(id) from baseinfo where userId=#{userId}
+    </select>
+
+    <select id="getMaxUnitInfoId" resultType="Integer" parameterType="Integer">
+        select max(id) from unitinfo where userId=#{userId}
+    </select>
+
+    <select id="getMaxContactInfoId" resultType="Integer" parameterType="Integer">
+        select max(id) from contactinfo where userId=#{userId}
+    </select>
+
+    <select id="getMinBaseinfoId" resultType="int">
+        select min(id) from baseinfo where userId=#{userId}
+    </select>
+
+    <select id="getMinUnitInfoId" resultType="int">
+        select min(id) from unitinfo where userId=#{userId}
+    </select>
+
+    <select id="getMinContactInfoId" resultType="int">
+        select min(id) from contactinfo where userId=#{userId}
+    </select>
+
+    <select id="getOpenStatusList" resultMap="openStatusList">
+        select os.*,u.id uid,u.userName from openStatus os
+        inner join user u
+        on os.userId=u.id
+        where status='待审核'
+        limit #{fromRow},#{pageSize}
+    </select>
+
+    <select id="getCount" resultType="int">
+        select count(*) from openStatus os
+        inner join user u
+        on os.userId=u.id
+        where status='待审核'
+    </select>
+
+    <select id="searchOpenStatus" resultMap="openStatusList" parameterType="Integer">
+        select os.*,u.id uid,u.userName,u.score from openStatus os
+        inner join user u
+        on os.userId=u.id
+        where status='待审核' and os.userId=#{userId}
+    </select>
+
+    <select id="searchCreditCard" resultType="com.szit.eurekamanager.pojo.CreditCard">
+        SELECT MAX(ID) id,cardNum FROM creditCard
+    </select>
+</mapper>

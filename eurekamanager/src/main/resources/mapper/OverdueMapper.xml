@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.szit.eurekamanager.mapper.OverdueMapper">
+    <!-- 映射 -->
+    <resultMap type="com.szit.eurekamanager.pojo.CreditCard" id="cardList">
+        <result property="id" column="id" />
+        <result property="cardNum" column="cardNum" />
+        <result property="payPassword" column="payPassword" />
+        <association property="overdue" javaType="com.szit.eurekamanager.pojo.Overdue">
+            <id property="id" column="id" />
+            <result property="overdueAmounts" column="overMoney" />
+            <result property="overdueDate" column="overdueDate"/>
+            <result property="overdueRate" column="overdueRate"/>
+        </association>
+        <association property="baseInfo" javaType="com.szit.eurekamanager.pojo.BaseInfo">
+            <id property="id" column="id" />
+            <result property="name" column="name" />
+            <result property="identityCard" column="identityCard"/>
+            <result property="iphoneNum" column="iphoneNum"/>
+            <result property="familyAddress" column="familyAddress"/>
+            <result property="homeAddress" column="homeAddress"/>
+            <result property="marriage" column="marriage"/>
+            <result property="answer" column="answer"/>
+            <result property="baseMail" column="baseMail"/>
+            <result property="education" column="education"/>
+            <result property="userId" column="userId"/>
+        </association>
+    </resultMap>
+
+    <select id="getOverdueByPage" resultMap="cardList">
+        SELECT b.*,c.*,o.overdueAmount overMoney ,o.overdueDate FROM baseinfo b
+        inner join creditcard c
+        on b.userid = c.userid
+        inner join overdue o
+        on o.cardid = c.id
+        where 1 = 1
+        <if test="cardNum != null">
+            and c.cardNum like concat('%',#{cardNum},'%')
+        </if>
+        limit #{from},#{pageSize}
+    </select>
+
+    <!-- 查询分页记录总数,以便求总页数 -->
+    <select id="getCounts" resultType="int">
+        SELECT count(*) FROM baseinfo b
+        inner join creditcard c
+        on b.userid = c.userid
+        inner join overdue o
+        on o.cardid = c.id
+        where 1 = 1
+        <if test="cardNum != null">
+            and c.cardNum like concat('%',#{cardNum},'%')
+        </if>
+    </select>
+</mapper>

@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.szit.eurekarepaymentmanage.mapper.RepaymentMapper">
+    <!-- 映射 -->
+    <resultMap id="repaymentList" type="com.szit.eurekarepaymentmanage.pojo.Repayment">
+        <id property="id" column="id" />
+        <result property="cardId" column="cardid"/>
+        <result property="rmoney" column="rmoney"/>
+        <result property="duedate" column="duedate"/>
+        <result property="debitCardId" column="debitcardid"/>
+        <result property="changePeriodsId" column="changeperiodsid"/>
+    
+        <association property="creditCard" javaType="com.szit.eurekarepaymentmanage.pojo.CreditCard">
+            <id property="id" column="id" />
+            <result property="cardNum" column="cardnum" />
+            <result property="cardType" column="cardtype" />
+            <result property="creditLimit" column="creditlimit " />
+            <result property="useableLimit" column="useablelimit" />
+            <result property="alreadyLimit" column="alreadylimit" />
+            <result property="overdueAmount" column="overdueamount" />
+            <result property="changeLimit" column="changelimit" />
+            <result property="outDate" column="outdate" />
+            <result property="inDate" column="indate" />
+            <result property="payPassword" column="paypassword" />
+            <result property="currency" column="currency" />
+            <result property="openDate" column="opendate" />
+            <result property="userId" column="userid" />
+            <result property="cardStatusId" column="cardstatusId" />
+
+        </association>
+
+
+        <association property="changePeriods" javaType="com.szit.eurekarepaymentmanage.pojo.ChangePeriods">
+            <id property="id" column="id"/>
+            <result property="periodsId" column="periodsid" />
+            <result property="rate" column="rate" />
+            <result property="amount" column="amount" />
+            <result property="changeDate" column="changedate" />
+            <result property="changeStatus" column="changestatus" />
+            <result property="cardId" column="cardid" />
+        </association>
+
+        <association property="debitCard" javaType="com.szit.eurekarepaymentmanage.pojo.DebitCard">
+            <id property="id" column="id"/>
+            <result property="debitCardId" column="debitCardNum" />
+            <result property="payPassword" column="paypassword" />
+            <result property="balance" column="balance" />
+            <result property="userId" column="userid" />
+        </association>
+
+    </resultMap>
+
+    <!--通过用户id获取信用卡信息-->
+    <select id="getCardById" resultType="com.szit.eurekarepaymentmanage.pojo.CreditCard">
+        select *
+        from creditcard
+        where userid=#{id}
+        limit #{from},#{pageSize}
+    </select>
+
+    <select id="getAll" resultType="int">
+        select count(*) from creditcard
+        where userid=#{id}
+    </select>
+
+    <select id="getUserByUserName" resultType="com.szit.eurekarepaymentmanage.pojo.User">
+        select * from user where username=#{userName}
+    </select>
+
+    <select id="getCreditCardByCardNum" resultType="com.szit.eurekarepaymentmanage.pojo.CreditCard">
+        select *
+        from creditcard
+        where cardNum=#{cardNum}
+    </select>
+
+    <!--通过信用卡id获取逾期信息-->
+    <select id="getOverdueById" resultType="com.szit.eurekarepaymentmanage.pojo.Overdue">
+        select *
+        from overdue
+        where cardid=#{id}
+
+    </select>
+
+    <!--通过信用卡id获取分期信息-->
+    <select id="getChangePeriodsById" resultType="com.szit.eurekarepaymentmanage.pojo.ChangePeriods">
+        select *
+        from changeperiods
+        where cardid=#{id}
+
+    </select>
+
+    <!-- 通过用户id查询借记卡表 -->
+    <select id="getDebitCardById" resultType="com.szit.eurekarepaymentmanage.pojo.DebitCard">
+        select * from debitcard
+        where userid=#{id}
+
+    </select>
+
+    <!-- 通过输入的借记卡账号查询借记卡表 -->
+    <select id="getDebitCardByDid" resultType="com.szit.eurekarepaymentmanage.pojo.DebitCard">
+        select * from debitcard
+        where debitcardid=#{debitCardId}
+
+    </select>
+
+    <!-- 向还款记录表插入信息 -->
+    <insert id="addRepayment" parameterType="com.szit.eurekarepaymentmanage.pojo.Repayment">
+        insert  into repayment(rmoney,duedate,debitcardid,cardid,changeperiodsid)
+         values(#{rmoney},#{duedate},#{debitCardId},#{cardId},#{changePeriodsId})
+    </insert>
+
+    <!-- 修改信用卡信息表信息 -->
+    <insert id="alterCreditCard" parameterType="com.szit.eurekarepaymentmanage.pojo.CreditCard">
+        update creditcard set useablelimit=#{useableLimit}
+		where id=#{id}
+    </insert>
+    <!-- 修改借记卡信息表信息 -->
+    <insert id="alterDebitCard" parameterType="com.szit.eurekarepaymentmanage.pojo.DebitCard">
+        update debitcard set balance=#{balance}
+		where id=#{id}
+    </insert>
+
+    <select id="getAllRepayments" resultMap="repaymentList">
+        select r.*,c.*,dc.debitCardId debitCardNum from repayment r
+        inner join creditcard c
+        on r.cardid=c.id
+        inner join debitCard dc
+        on r.debitCardId=dc.id
+        where c.userid=#{userId}
+        limit #{from},#{pageSize}
+    </select>
+
+    <select id="getCounts" resultType="int">
+        select count(*) from repayment r
+        inner join creditcard c
+        on r.cardid=c.id
+        inner join user u
+        on c.userId=u.id
+        where c.userid=#{userId}
+    </select>
+</mapper>

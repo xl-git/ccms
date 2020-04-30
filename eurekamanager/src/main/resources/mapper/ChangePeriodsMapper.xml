@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.szit.eurekamanager.mapper.ChangePeriodsMapper">
+    <!-- 映射 -->
+    <resultMap type="com.szit.eurekamanager.pojo.CreditCard" id="cardList">
+        <result property="id" column="id" />
+        <result property="cardNum" column="cardNum" />
+        <result property="payPassword" column="payPassword" />
+        <association property="changePeriods" javaType="com.szit.eurekamanager.pojo.ChangePeriods">
+            <id property="id" column="id" />
+            <result property="periodsId" column="periodsId" />
+            <result property="rate" column="rate"/>
+            <result property="amount" column="amount"/>
+            <result property="changeDate" column="changeDate"/>
+            <result property="changeStatus" column="changeStatus"/>
+        </association>
+        <association property="baseInfo" javaType="com.szit.eurekamanager.pojo.BaseInfo">
+            <id property="id" column="id" />
+            <result property="name" column="name" />
+            <result property="identityCard" column="identityCard"/>
+            <result property="iphoneNum" column="iphoneNum"/>
+            <result property="familyAddress" column="familyAddress"/>
+            <result property="homeAddress" column="homeAddress"/>
+            <result property="marriage" column="marriage"/>
+            <result property="answer" column="answer"/>
+            <result property="baseMail" column="baseMail"/>
+            <result property="education" column="education"/>
+            <result property="userId" column="userId"/>
+        </association>
+    </resultMap>
+    <select id="getChangePeriods" resultMap="cardList">
+        select * from changePeriods p
+        inner join creditcard c
+        on c.id = p.cardid
+        inner join baseinfo b
+        on b.userid = c.userid
+        where 1=1
+        <if test="cardNum != null">
+            and c.cardNum like concat('%',#{cardNum},'%')
+        </if>
+        limit #{from},#{pageSize}
+    </select>
+
+    <!-- 查询分页记录总数,以便求总页数 -->
+    <select id="getCounts" resultType="int">
+        select count(*) from changePeriods p
+        inner join creditcard c
+        on c.id = p.cardid
+        inner join baseinfo b
+        on b.userid = c.userid
+        where 1=1
+        <if test="cardNum != null">
+            and c.cardNum like concat('%',#{cardNum},'%')
+        </if>
+    </select>
+
+    <select id="getChangeDetails" resultMap="cardList">
+        select * from changePeriods p
+        inner join creditcard c
+        on c.id = p.cardid
+        inner join baseinfo b
+        on b.userid = c.userid
+        where  c.cardNum = #{cardNum}
+        and p.changedate =#{changeDate}
+    </select>
+
+</mapper>
